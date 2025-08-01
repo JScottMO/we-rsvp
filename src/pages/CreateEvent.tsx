@@ -280,7 +280,9 @@ const CreateEvent = () => {
                     mode="multiple"
                     selected={selectedDates}
                     onSelect={(dates) => {
+                      console.log('Calendar onSelect triggered with:', dates);
                       if (dates) {
+                        console.log('Setting selected dates to:', dates);
                         setSelectedDates(dates);
                         setFormData(prev => ({
                           ...prev,
@@ -290,7 +292,7 @@ const CreateEvent = () => {
                     }}
                     disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
                     weekStartsOn={formData.weekStartDay === '0' ? 0 : 1}
-                    className="rounded-md"
+                    className="rounded-md pointer-events-auto"
                   />
                 </div>
               )}
