@@ -289,7 +289,7 @@ const CreateEvent = () => {
                       }
                     }}
                     disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
-                    weekStartsOn={parseInt(formData.weekStartDay) as 0 | 1 | 2 | 3 | 4 | 5 | 6}
+                    weekStartsOn={formData.weekStartDay === '0' ? 0 : 1}
                     className="rounded-md"
                   />
                 </div>
