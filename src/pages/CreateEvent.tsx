@@ -82,7 +82,18 @@ const CreateEvent = () => {
         break;
     }
 
-    datesToAdd.forEach(handleDateSelect);
+    // Filter out dates that already exist and add new ones
+    const existingDateStrings = selectedDates.map(d => format(d, 'yyyy-MM-dd'));
+    const newDates = datesToAdd.filter(date => 
+      !existingDateStrings.includes(format(date, 'yyyy-MM-dd'))
+    );
+    
+    const updatedDates = [...selectedDates, ...newDates];
+    setSelectedDates(updatedDates);
+    setFormData(prev => ({
+      ...prev,
+      dateOptions: updatedDates
+    }));
   };
 
   const handleCreateEvent = async () => {
