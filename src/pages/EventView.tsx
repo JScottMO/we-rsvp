@@ -9,6 +9,7 @@ import { Share2, Users, Download, CalendarDays, Clock } from "lucide-react";
 import { AvailabilityGrid } from "@/components/AvailabilityGrid";
 import { ParticipantList } from "@/components/ParticipantList";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Event {
   id: string;
@@ -40,46 +41,58 @@ const EventView = () => {
   const [showJoinDialog, setShowJoinDialog] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  // Mock data for development - will be replaced with Supabase
+  // Fetch event and responses from Supabase
   useEffect(() => {
-    // TODO: Fetch event and responses from Supabase
-    setEvent({
-      id: eventId || '',
-      title: "Team Planning Meeting",
-      description: "Planning our next sprint and discussing project timeline",
-      dateOptions: ['2024-01-15', '2024-01-16', '2024-01-17'],
-      earliestTime: '09:00',
-      latestTime: '17:00',
-      timeIncrement: 30,
-      weekStartDay: 1
-    });
+    const fetchEvent = async () => {
+      if (!eventId) return;
 
-    setResponses([
-      {
-        id: '1',
-        participantName: 'Alice',
-        availability: {
-          '2024-01-15T09:00': true,
-          '2024-01-15T09:30': true,
-          '2024-01-15T10:00': false,
-          '2024-01-16T14:00': true,
-          '2024-01-16T14:30': true,
-        },
-        updatedAt: '2024-01-14T10:00:00Z'
-      },
-      {
-        id: '2',
-        participantName: 'Bob',
-        availability: {
-          '2024-01-15T09:30': true,
-          '2024-01-15T10:00': true,
-          '2024-01-16T14:00': true,
-          '2024-01-16T14:30': false,
-        },
-        updatedAt: '2024-01-14T11:30:00Z'
+      try {
+        const { data: eventData, error: eventError } = await supabase
+          .from('events')
+          .select('*')
+          .eq('id', eventId)
+          .single();
+
+        if (eventError) throw eventError;
+
+        setEvent({
+          id: eventData.id,
+          title: eventData.title,
+          description: eventData.description,
+          dateOptions: eventData.date_options,
+          earliestTime: eventData.earliest_time,
+          latestTime: eventData.latest_time,
+          timeIncrement: eventData.time_increment,
+          weekStartDay: eventData.week_start_day
+        });
+
+        // Fetch responses
+        const { data: responsesData, error: responsesError } = await supabase
+          .from('responses')
+          .select('*')
+          .eq('event_id', eventId);
+
+        if (responsesError) throw responsesError;
+
+        setResponses(responsesData.map(r => ({
+          id: r.id,
+          participantName: r.participant_name,
+          availability: r.availability as Record<string, boolean>,
+          updatedAt: r.updated_at
+        })));
+
+      } catch (error) {
+        console.error('Error fetching event:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load event. Please check the URL and try again.",
+          variant: "destructive"
+        });
       }
-    ]);
-  }, [eventId]);
+    };
+
+    fetchEvent();
+  }, [eventId, toast]);
 
   const handleJoinEvent = () => {
     if (!participantName.trim()) return;

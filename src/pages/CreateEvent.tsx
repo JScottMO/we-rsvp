@@ -9,10 +9,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarDays, ArrowLeft, Plus, X } from "lucide-react";
 import { format, addDays } from "date-fns";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const CreateEvent = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   const [formData, setFormData] = useState({
     title: searchParams.get('title') || '',
@@ -100,11 +103,35 @@ const CreateEvent = () => {
     if (!formData.title.trim() || selectedDates.length === 0) return;
 
     try {
-      // TODO: Create event in Supabase
-      const eventId = 'temp-id'; // Will be replaced with actual Supabase creation
-      navigate(`/event/${eventId}`);
+      const { data, error } = await supabase
+        .from('events')
+        .insert({
+          title: formData.title,
+          description: formData.description || null,
+          date_options: selectedDates.map(date => format(date, 'yyyy-MM-dd')),
+          earliest_time: formData.earliestTime,
+          latest_time: formData.latestTime,
+          time_increment: parseInt(formData.timeIncrement),
+          week_start_day: parseInt(formData.weekStartDay)
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      toast({
+        title: "Event created!",
+        description: "Your event has been created successfully."
+      });
+
+      navigate(`/event/${data.id}`);
     } catch (error) {
       console.error('Error creating event:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create event. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 
