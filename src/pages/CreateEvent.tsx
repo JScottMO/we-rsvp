@@ -21,7 +21,7 @@ const CreateEvent = () => {
     earliestTime: '09:00',
     latestTime: '17:00',
     timeIncrement: '30',
-    weekStartDay: '1'
+    weekStartDay: '0'
   });
 
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
@@ -165,6 +165,67 @@ const CreateEvent = () => {
             </CardContent>
           </Card>
 
+          {/* Time Settings */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Time settings</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="earliest">Earliest time</Label>
+                  <Input
+                    id="earliest"
+                    type="time"
+                    value={formData.earliestTime}
+                    onChange={(e) => setFormData(prev => ({ ...prev, earliestTime: e.target.value }))}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="latest">Latest time</Label>
+                  <Input
+                    id="latest"
+                    type="time"
+                    value={formData.latestTime}
+                    onChange={(e) => setFormData(prev => ({ ...prev, latestTime: e.target.value }))}
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="increment">Time increment</Label>
+                  <Select value={formData.timeIncrement} onValueChange={(value) => 
+                    setFormData(prev => ({ ...prev, timeIncrement: value }))
+                  }>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="15">15 minutes</SelectItem>
+                      <SelectItem value="30">30 minutes</SelectItem>
+                      <SelectItem value="60">1 hour</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="weekstart">Week starts on</Label>
+                  <Select value={formData.weekStartDay} onValueChange={(value) => 
+                    setFormData(prev => ({ ...prev, weekStartDay: value }))
+                  }>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="0">Sunday</SelectItem>
+                      <SelectItem value="1">Monday</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Date Selection */}
           <Card>
             <CardHeader>
@@ -228,6 +289,7 @@ const CreateEvent = () => {
                       }
                     }}
                     disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                    weekStartsOn={parseInt(formData.weekStartDay) as 0 | 1 | 2 | 3 | 4 | 5 | 6}
                     className="rounded-md"
                   />
                 </div>
@@ -257,67 +319,6 @@ const CreateEvent = () => {
                   </div>
                 </div>
               )}
-            </CardContent>
-          </Card>
-
-          {/* Time Settings */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Time settings</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="earliest">Earliest time</Label>
-                  <Input
-                    id="earliest"
-                    type="time"
-                    value={formData.earliestTime}
-                    onChange={(e) => setFormData(prev => ({ ...prev, earliestTime: e.target.value }))}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="latest">Latest time</Label>
-                  <Input
-                    id="latest"
-                    type="time"
-                    value={formData.latestTime}
-                    onChange={(e) => setFormData(prev => ({ ...prev, latestTime: e.target.value }))}
-                  />
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="increment">Time increment</Label>
-                  <Select value={formData.timeIncrement} onValueChange={(value) => 
-                    setFormData(prev => ({ ...prev, timeIncrement: value }))
-                  }>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="15">15 minutes</SelectItem>
-                      <SelectItem value="30">30 minutes</SelectItem>
-                      <SelectItem value="60">1 hour</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="weekstart">Week starts on</Label>
-                  <Select value={formData.weekStartDay} onValueChange={(value) => 
-                    setFormData(prev => ({ ...prev, weekStartDay: value }))
-                  }>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="0">Sunday</SelectItem>
-                      <SelectItem value="1">Monday</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
             </CardContent>
           </Card>
 
