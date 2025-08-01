@@ -78,7 +78,7 @@ const CreateEvent = () => {
         datesToAdd = [addDays(today, 1)];
         break;
       case 'week':
-        datesToAdd = Array.from({ length: 7 }, (_, i) => addDays(today, i));
+        datesToAdd = Array.from({ length: 8 }, (_, i) => addDays(today, i));
         break;
     }
 
