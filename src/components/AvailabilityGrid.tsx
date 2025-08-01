@@ -105,8 +105,14 @@ export const AvailabilityGrid = ({
     setDragMode(null);
   };
 
-  const handleClick = (date: string, time: string) => {
-    if (!isEditing || isDragging) return;
+  const handleClick = (date: string, time: string, event: React.MouseEvent) => {
+    // Prevent click if we just finished dragging
+    if (isDragging) {
+      event.preventDefault();
+      return;
+    }
+    
+    if (!isEditing) return;
     
     const timeSlotKey = `${date}T${time}`;
     const currentlyAvailable = isUserAvailable(date, time);
@@ -162,7 +168,7 @@ export const AvailabilityGrid = ({
                     handleCellInteraction(date, time, true);
                   }}
                   onMouseEnter={() => handleCellInteraction(date, time)}
-                  onClick={() => handleClick(date, time)}
+                  onClick={(e) => handleClick(date, time, e)}
                   title={
                     responses.length > 0 
                       ? `${Math.round(consensusLevel * 100)}% available (${Math.round(consensusLevel * responses.length)}/${responses.length})`
