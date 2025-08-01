@@ -14,7 +14,83 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      events: {
+        Row: {
+          created_at: string
+          date_options: string[]
+          description: string | null
+          earliest_time: string
+          id: string
+          latest_time: string
+          time_increment: number
+          title: string
+          updated_at: string
+          week_start_day: number
+        }
+        Insert: {
+          created_at?: string
+          date_options: string[]
+          description?: string | null
+          earliest_time?: string
+          id?: string
+          latest_time?: string
+          time_increment?: number
+          title: string
+          updated_at?: string
+          week_start_day?: number
+        }
+        Update: {
+          created_at?: string
+          date_options?: string[]
+          description?: string | null
+          earliest_time?: string
+          id?: string
+          latest_time?: string
+          time_increment?: number
+          title?: string
+          updated_at?: string
+          week_start_day?: number
+        }
+        Relationships: []
+      }
+      responses: {
+        Row: {
+          availability: Json
+          created_at: string
+          event_id: string
+          id: string
+          participant_name: string
+          participant_password_hash: string | null
+          updated_at: string
+        }
+        Insert: {
+          availability?: Json
+          created_at?: string
+          event_id: string
+          id?: string
+          participant_name: string
+          participant_password_hash?: string | null
+          updated_at?: string
+        }
+        Update: {
+          availability?: Json
+          created_at?: string
+          event_id?: string
+          id?: string
+          participant_name?: string
+          participant_password_hash?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "responses_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
