@@ -26,6 +26,7 @@ const CreateEvent = () => {
 
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [calendarOpened, setCalendarOpened] = useState(false);
 
   const handleDateSelect = (date: Date | undefined) => {
     if (!date) return;
@@ -34,7 +35,18 @@ const CreateEvent = () => {
       format(d, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
     );
     
-    if (!dateExists) {
+    if (dateExists) {
+      // Remove date if already selected
+      const filtered = selectedDates.filter(d => 
+        format(d, 'yyyy-MM-dd') !== format(date, 'yyyy-MM-dd')
+      );
+      setSelectedDates(filtered);
+      setFormData(prev => ({
+        ...prev,
+        dateOptions: filtered
+      }));
+    } else {
+      // Add date if not selected
       setSelectedDates([...selectedDates, date]);
       setFormData(prev => ({
         ...prev,
@@ -177,7 +189,12 @@ const CreateEvent = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setShowCalendar(!showCalendar)}
+                  onClick={() => {
+                    if (!calendarOpened) {
+                      setCalendarOpened(true);
+                    }
+                    setShowCalendar(!showCalendar);
+                  }}
                 >
                   <CalendarDays className="w-4 h-4 mr-1" />
                   Pick dates
@@ -185,11 +202,20 @@ const CreateEvent = () => {
               </div>
 
               {/* Calendar picker */}
-              {showCalendar && (
+              {(showCalendar || calendarOpened) && (
                 <div className="border border-border rounded-md p-4">
                   <Calendar
-                    mode="single"
-                    onSelect={handleDateSelect}
+                    mode="multiple"
+                    selected={selectedDates}
+                    onSelect={(dates) => {
+                      if (dates) {
+                        setSelectedDates(dates);
+                        setFormData(prev => ({
+                          ...prev,
+                          dateOptions: dates
+                        }));
+                      }
+                    }}
                     disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
                     className="rounded-md"
                   />
