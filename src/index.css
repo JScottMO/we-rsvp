@@ -2,39 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* we.rsvp Design System - Minimalist scheduling tool
+All colors MUST be HSL. Focus on function over flourish.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 98%;
+    --foreground: 210 20% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 210 20% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 210 20% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 155 70% 45%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 155 70% 40%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 210 20% 15%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 15% 94%;
+    --muted-foreground: 210 15% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 155 60% 95%;
+    --accent-foreground: 155 70% 25%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 210 20% 88%;
+    --input: 210 20% 92%;
+    --ring: 155 70% 45%;
+
+    /* Availability states */
+    --available: 155 70% 45%;
+    --available-light: 155 60% 95%;
+    --unavailable: 210 15% 94%;
+    --consensus-1: 155 60% 90%;
+    --consensus-2: 155 65% 75%;
+    --consensus-3: 155 70% 60%;
+    --consensus-4: 155 75% 45%;
+    --consensus-max: 155 80% 35%;
+
+    /* Grid and interaction */
+    --grid-border: 210 20% 85%;
+    --grid-hover: 155 50% 97%;
+    --time-label: 210 15% 65%;
 
     --radius: 0.5rem;
 

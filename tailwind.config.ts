@@ -26,7 +26,8 @@ export default {
 				foreground: 'hsl(var(--foreground))',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					foreground: 'hsl(var(--primary-foreground))',
+					hover: 'hsl(var(--primary-hover))'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
@@ -52,6 +53,23 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				available: {
+					DEFAULT: 'hsl(var(--available))',
+					light: 'hsl(var(--available-light))'
+				},
+				unavailable: 'hsl(var(--unavailable))',
+				consensus: {
+					1: 'hsl(var(--consensus-1))',
+					2: 'hsl(var(--consensus-2))',
+					3: 'hsl(var(--consensus-3))',
+					4: 'hsl(var(--consensus-4))',
+					max: 'hsl(var(--consensus-max))'
+				},
+				grid: {
+					border: 'hsl(var(--grid-border))',
+					hover: 'hsl(var(--grid-hover))'
+				},
+				'time-label': 'hsl(var(--time-label))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',

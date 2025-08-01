@@ -1,0 +1,338 @@
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Share2, Users, Download, CalendarDays, Clock } from "lucide-react";
+import { AvailabilityGrid } from "@/components/AvailabilityGrid";
+import { ParticipantList } from "@/components/ParticipantList";
+import { useToast } from "@/hooks/use-toast";
+
+interface Event {
+  id: string;
+  title: string;
+  description?: string;
+  dateOptions: string[];
+  earliestTime: string;
+  latestTime: string;
+  timeIncrement: number;
+  weekStartDay: number;
+}
+
+interface Response {
+  id: string;
+  participantName: string;
+  availability: Record<string, boolean>;
+  updatedAt: string;
+}
+
+const EventView = () => {
+  const { eventId } = useParams();
+  const { toast } = useToast();
+  
+  const [event, setEvent] = useState<Event | null>(null);
+  const [responses, setResponses] = useState<Response[]>([]);
+  const [userResponse, setUserResponse] = useState<Response | null>(null);
+  const [participantName, setParticipantName] = useState("");
+  const [participantPassword, setParticipantPassword] = useState("");
+  const [showJoinDialog, setShowJoinDialog] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Mock data for development - will be replaced with Supabase
+  useEffect(() => {
+    // TODO: Fetch event and responses from Supabase
+    setEvent({
+      id: eventId || '',
+      title: "Team Planning Meeting",
+      description: "Planning our next sprint and discussing project timeline",
+      dateOptions: ['2024-01-15', '2024-01-16', '2024-01-17'],
+      earliestTime: '09:00',
+      latestTime: '17:00',
+      timeIncrement: 30,
+      weekStartDay: 1
+    });
+
+    setResponses([
+      {
+        id: '1',
+        participantName: 'Alice',
+        availability: {
+          '2024-01-15T09:00': true,
+          '2024-01-15T09:30': true,
+          '2024-01-15T10:00': false,
+          '2024-01-16T14:00': true,
+          '2024-01-16T14:30': true,
+        },
+        updatedAt: '2024-01-14T10:00:00Z'
+      },
+      {
+        id: '2',
+        participantName: 'Bob',
+        availability: {
+          '2024-01-15T09:30': true,
+          '2024-01-15T10:00': true,
+          '2024-01-16T14:00': true,
+          '2024-01-16T14:30': false,
+        },
+        updatedAt: '2024-01-14T11:30:00Z'
+      }
+    ]);
+  }, [eventId]);
+
+  const handleJoinEvent = () => {
+    if (!participantName.trim()) return;
+    
+    // Check if participant already exists
+    const existing = responses.find(r => r.participantName === participantName);
+    if (existing) {
+      // TODO: Verify password if set
+      setUserResponse(existing);
+      setIsEditing(true);
+    } else {
+      // Create new response
+      const newResponse: Response = {
+        id: Date.now().toString(),
+        participantName,
+        availability: {},
+        updatedAt: new Date().toISOString()
+      };
+      setUserResponse(newResponse);
+      setIsEditing(true);
+    }
+    setShowJoinDialog(false);
+  };
+
+  const handleAvailabilityChange = (timeSlot: string, available: boolean) => {
+    if (!userResponse) return;
+    
+    const updated = {
+      ...userResponse,
+      availability: {
+        ...userResponse.availability,
+        [timeSlot]: available
+      },
+      updatedAt: new Date().toISOString()
+    };
+    
+    setUserResponse(updated);
+    
+    // Update in responses list
+    setResponses(prev => {
+      const existing = prev.find(r => r.participantName === participantName);
+      if (existing) {
+        return prev.map(r => r.participantName === participantName ? updated : r);
+      } else {
+        return [...prev, updated];
+      }
+    });
+  };
+
+  const handleSaveResponse = async () => {
+    if (!userResponse) return;
+    
+    try {
+      // TODO: Save to Supabase
+      toast({
+        title: "Availability saved",
+        description: "Your response has been recorded."
+      });
+      setIsEditing(false);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to save your response. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const copyEventLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast({
+      title: "Link copied",
+      description: "Event link has been copied to your clipboard."
+    });
+  };
+
+  const exportToCalendar = () => {
+    // TODO: Generate .ics file
+    toast({
+      title: "Export coming soon",
+      description: "Calendar export will be available soon."
+    });
+  };
+
+  if (!event) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading event...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b border-border bg-card">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <CalendarDays className="w-5 h-5 text-primary-foreground" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-foreground">{event.title}</h1>
+                {event.description && (
+                  <p className="text-muted-foreground">{event.description}</p>
+                )}
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" onClick={copyEventLink}>
+                <Share2 className="w-4 h-4 mr-2" />
+                Share
+              </Button>
+              <Button variant="outline" size="sm" onClick={exportToCalendar}>
+                <Download className="w-4 h-4 mr-2" />
+                Export
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="container mx-auto px-4 py-8">
+        <div className="max-w-6xl mx-auto">
+          {/* Event Info */}
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            <Card>
+              <CardContent className="flex items-center gap-3 pt-6">
+                <CalendarDays className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="font-medium">{event.dateOptions.length} dates</p>
+                  <p className="text-sm text-muted-foreground">
+                    {event.dateOptions.length === 1 ? 'Single day' : 'Multiple options'}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardContent className="flex items-center gap-3 pt-6">
+                <Clock className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="font-medium">{event.earliestTime} - {event.latestTime}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {event.timeIncrement}min intervals
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardContent className="flex items-center gap-3 pt-6">
+                <Users className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="font-medium">{responses.length} responses</p>
+                  <p className="text-sm text-muted-foreground">
+                    {responses.length === 0 ? 'No one yet' : 'People responded'}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid lg:grid-cols-4 gap-8">
+            {/* Availability Grid */}
+            <div className="lg:col-span-3">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <CardTitle>Availability</CardTitle>
+                  {!isEditing && (
+                    <Dialog open={showJoinDialog} onOpenChange={setShowJoinDialog}>
+                      <DialogTrigger asChild>
+                        <Button>
+                          {userResponse ? "Edit response" : "Join event"}
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Join the event</DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                          <div>
+                            <Label htmlFor="name">Your name</Label>
+                            <Input
+                              id="name"
+                              placeholder="Enter your name"
+                              value={participantName}
+                              onChange={(e) => setParticipantName(e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="password">Password (optional)</Label>
+                            <Input
+                              id="password"
+                              type="password"
+                              placeholder="Secure your response (optional)"
+                              value={participantPassword}
+                              onChange={(e) => setParticipantPassword(e.target.value)}
+                            />
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Without a password, anyone can edit your response using your name.
+                            </p>
+                          </div>
+                          <Button 
+                            onClick={handleJoinEvent}
+                            disabled={!participantName.trim()}
+                            className="w-full"
+                          >
+                            Continue
+                          </Button>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  )}
+                </CardHeader>
+                <CardContent>
+                  <AvailabilityGrid
+                    event={event}
+                    responses={responses}
+                    userResponse={userResponse}
+                    isEditing={isEditing}
+                    onAvailabilityChange={handleAvailabilityChange}
+                  />
+                  {isEditing && (
+                    <div className="flex gap-2 mt-4">
+                      <Button onClick={handleSaveResponse}>
+                        Save response
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        onClick={() => setIsEditing(false)}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Participants List */}
+            <div className="lg:col-span-1">
+              <ParticipantList responses={responses} />
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default EventView;
