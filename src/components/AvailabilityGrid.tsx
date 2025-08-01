@@ -30,6 +30,7 @@ export const AvailabilityGrid = ({
 }: Props) => {
   const [dragMode, setDragMode] = useState<'select' | 'deselect' | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [dragStarted, setDragStarted] = useState(false);
 
   // Generate time slots
   const generateTimeSlots = () => {
@@ -80,39 +81,48 @@ export const AvailabilityGrid = ({
     return userResponse.availability[timeSlotKey] || false;
   };
 
-  const handleCellInteraction = (date: string, time: string, isMouseDown: boolean = false) => {
+  const handleMouseDown = (date: string, time: string, event: React.MouseEvent) => {
     if (!isEditing) return;
+    
+    event.preventDefault();
+    setDragStarted(true);
     
     const timeSlotKey = `${date}T${time}`;
     const currentlyAvailable = isUserAvailable(date, time);
     
-    if (isMouseDown) {
-      // Start dragging
-      setIsDragging(true);
-      setDragMode(currentlyAvailable ? 'deselect' : 'select');
-      onAvailabilityChange(timeSlotKey, !currentlyAvailable);
-    } else if (isDragging && dragMode) {
-      // Continue dragging
-      const shouldBeAvailable = dragMode === 'select';
-      if (currentlyAvailable !== shouldBeAvailable) {
-        onAvailabilityChange(timeSlotKey, shouldBeAvailable);
-      }
+    setIsDragging(true);
+    setDragMode(currentlyAvailable ? 'deselect' : 'select');
+    onAvailabilityChange(timeSlotKey, !currentlyAvailable);
+  };
+
+  const handleMouseEnter = (date: string, time: string) => {
+    if (!isEditing || !isDragging || !dragMode) return;
+    
+    const timeSlotKey = `${date}T${time}`;
+    const currentlyAvailable = isUserAvailable(date, time);
+    const shouldBeAvailable = dragMode === 'select';
+    
+    if (currentlyAvailable !== shouldBeAvailable) {
+      onAvailabilityChange(timeSlotKey, shouldBeAvailable);
     }
   };
 
   const handleMouseUp = () => {
+    if (dragStarted) {
+      // Small delay to prevent click event from firing after drag
+      setTimeout(() => {
+        setDragStarted(false);
+      }, 50);
+    }
     setIsDragging(false);
     setDragMode(null);
   };
 
   const handleClick = (date: string, time: string, event: React.MouseEvent) => {
-    // Prevent click if we just finished dragging
-    if (isDragging) {
+    if (!isEditing || dragStarted) {
       event.preventDefault();
       return;
     }
-    
-    if (!isEditing) return;
     
     const timeSlotKey = `${date}T${time}`;
     const currentlyAvailable = isUserAvailable(date, time);
@@ -163,11 +173,8 @@ export const AvailabilityGrid = ({
                     ${userAvailable && canEdit ? 'ring-2 ring-primary ring-inset' : ''}
                     ${getConsensusColor(consensusLevel)}
                   `}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    handleCellInteraction(date, time, true);
-                  }}
-                  onMouseEnter={() => handleCellInteraction(date, time)}
+                  onMouseDown={(e) => handleMouseDown(date, time, e)}
+                  onMouseEnter={() => handleMouseEnter(date, time)}
                   onClick={(e) => handleClick(date, time, e)}
                   title={
                     responses.length > 0 
