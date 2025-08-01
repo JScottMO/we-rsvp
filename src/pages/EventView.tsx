@@ -143,18 +143,61 @@ const EventView = () => {
   };
 
   const handleSaveResponse = async () => {
-    if (!userResponse) return;
+    if (!userResponse || !eventId) return;
     
     try {
-      // TODO: Save to Supabase
+      // Check if user response already exists
+      const existingResponse = responses.find(r => r.participantName === userResponse.participantName);
+      
+      if (existingResponse) {
+        // Update existing response
+        const { error } = await supabase
+          .from('responses')
+          .update({
+            availability: userResponse.availability,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', existingResponse.id);
+          
+        if (error) throw error;
+      } else {
+        // Create new response
+        const { error } = await supabase
+          .from('responses')
+          .insert({
+            event_id: eventId,
+            participant_name: userResponse.participantName,
+            availability: userResponse.availability,
+            participant_password_hash: participantPassword ? btoa(participantPassword) : null
+          });
+          
+        if (error) throw error;
+      }
+      
+      // Refetch responses to get latest data
+      const { data: responsesData, error: fetchError } = await supabase
+        .from('responses')
+        .select('*')
+        .eq('event_id', eventId);
+        
+      if (fetchError) throw fetchError;
+      
+      setResponses(responsesData.map(r => ({
+        id: r.id,
+        participantName: r.participant_name,
+        availability: r.availability as Record<string, boolean>,
+        updatedAt: r.updated_at
+      })));
+      
       toast({
         title: "Availability saved",
         description: "Your response has been recorded."
       });
       setIsEditing(false);
     } catch (error) {
+      console.error('Error saving response:', error);
       toast({
-        title: "Error",
+        title: "Error", 
         description: "Failed to save your response. Please try again.",
         variant: "destructive"
       });
