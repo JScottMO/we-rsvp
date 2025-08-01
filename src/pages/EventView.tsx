@@ -146,10 +146,15 @@ const EventView = () => {
     if (!userResponse || !eventId) return;
     
     try {
-      // Check if user response already exists
-      const existingResponse = responses.find(r => r.participantName === userResponse.participantName);
+      // Check if user response already exists in the database (not local state)
+      const { data: existingResponseData } = await supabase
+        .from('responses')
+        .select('id')
+        .eq('event_id', eventId)
+        .eq('participant_name', userResponse.participantName)
+        .maybeSingle();
       
-      if (existingResponse) {
+      if (existingResponseData) {
         // Update existing response
         const { error } = await supabase
           .from('responses')
@@ -157,7 +162,7 @@ const EventView = () => {
             availability: userResponse.availability,
             updated_at: new Date().toISOString()
           })
-          .eq('id', existingResponse.id);
+          .eq('id', existingResponseData.id);
           
         if (error) throw error;
       } else {
