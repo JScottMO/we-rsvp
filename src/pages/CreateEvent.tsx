@@ -7,10 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
-import { CalendarDays, ArrowLeft, Plus, X } from "lucide-react";
+import { CalendarDays, ArrowLeft, Plus, X, Lock } from "lucide-react";
 import { format, addDays } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { generateEncryptionKey, encryptText } from "@/lib/encryption";
 
 const CreateEvent = () => {
   const [searchParams] = useSearchParams();
@@ -103,11 +104,20 @@ const CreateEvent = () => {
     if (!formData.title.trim() || selectedDates.length === 0) return;
 
     try {
+      // Generate encryption key for E2EE
+      const encryptionKey = await generateEncryptionKey();
+      
+      // Encrypt sensitive data
+      const encryptedTitle = await encryptText(formData.title, encryptionKey);
+      const encryptedDescription = formData.description 
+        ? await encryptText(formData.description, encryptionKey)
+        : null;
+
       const { data, error } = await supabase
         .from('events')
         .insert({
-          title: formData.title,
-          description: formData.description || null,
+          title: encryptedTitle,
+          description: encryptedDescription,
           date_options: selectedDates.map(date => format(date, 'yyyy-MM-dd')),
           earliest_time: formData.earliestTime,
           latest_time: formData.latestTime,
@@ -121,10 +131,11 @@ const CreateEvent = () => {
 
       toast({
         title: "Event created!",
-        description: "Your event has been created successfully."
+        description: "Your event has been created with end-to-end encryption."
       });
 
-      navigate(`/event/${data.id}`);
+      // Navigate with encryption key in URL hash (never sent to server)
+      navigate(`/event/${data.id}#${encryptionKey}`);
     } catch (error) {
       console.error('Error creating event:', error);
       toast({
@@ -352,14 +363,20 @@ const CreateEvent = () => {
           </Card>
 
           {/* Create Button */}
-          <Button 
-            onClick={handleCreateEvent}
-            disabled={!isValid}
-            className="w-full"
-            size="lg"
-          >
-            Create event
-          </Button>
+          <div className="space-y-2">
+            <Button 
+              onClick={handleCreateEvent}
+              disabled={!isValid}
+              className="w-full"
+              size="lg"
+            >
+              <Lock className="w-4 h-4 mr-2" />
+              Create encrypted event
+            </Button>
+            <p className="text-xs text-muted-foreground text-center">
+              Your event will be end-to-end encrypted. Only people with the link can see it.
+            </p>
+          </div>
         </div>
       </main>
     </div>

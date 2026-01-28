@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Share2, Users, Download, CalendarDays, Clock } from "lucide-react";
+import { Share2, Users, Download, CalendarDays, Clock, Lock, AlertTriangle } from "lucide-react";
 import { AvailabilityGrid } from "@/components/AvailabilityGrid";
 import { ParticipantList } from "@/components/ParticipantList";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { decryptText, encryptText, isEncrypted, getKeyFromHash } from "@/lib/encryption";
 
 interface Event {
   id: string;
@@ -31,6 +32,7 @@ interface Response {
 
 const EventView = () => {
   const { eventId } = useParams();
+  const location = useLocation();
   const { toast } = useToast();
   
   const [event, setEvent] = useState<Event | null>(null);
@@ -40,12 +42,22 @@ const EventView = () => {
   const [participantPassword, setParticipantPassword] = useState("");
   const [showJoinDialog, setShowJoinDialog] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [encryptionKey, setEncryptionKey] = useState<string | null>(null);
+  const [decryptionError, setDecryptionError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Extract encryption key from URL hash
+  useEffect(() => {
+    const key = getKeyFromHash();
+    setEncryptionKey(key);
+  }, [location.hash]);
 
   // Fetch event and responses from Supabase
   useEffect(() => {
     const fetchEvent = async () => {
       if (!eventId) return;
 
+      setIsLoading(true);
       try {
         const { data: eventData, error: eventError } = await supabase
           .from('events')
@@ -55,10 +67,35 @@ const EventView = () => {
 
         if (eventError) throw eventError;
 
+        // Try to decrypt if we have an encryption key and data appears encrypted
+        let decryptedTitle = eventData.title;
+        let decryptedDescription = eventData.description;
+        
+        const titleIsEncrypted = isEncrypted(eventData.title);
+        
+        if (titleIsEncrypted && encryptionKey) {
+          try {
+            decryptedTitle = await decryptText(eventData.title, encryptionKey);
+            if (eventData.description) {
+              decryptedDescription = await decryptText(eventData.description, encryptionKey);
+            }
+            setDecryptionError(false);
+          } catch (error) {
+            console.error('Decryption failed:', error);
+            setDecryptionError(true);
+            decryptedTitle = '[Encrypted - Invalid key]';
+            decryptedDescription = '';
+          }
+        } else if (titleIsEncrypted && !encryptionKey) {
+          setDecryptionError(true);
+          decryptedTitle = '[Encrypted - Key required]';
+          decryptedDescription = '';
+        }
+
         setEvent({
           id: eventData.id,
-          title: eventData.title,
-          description: eventData.description,
+          title: decryptedTitle,
+          description: decryptedDescription,
           dateOptions: eventData.date_options,
           earliestTime: eventData.earliest_time,
           latestTime: eventData.latest_time,
@@ -74,13 +111,27 @@ const EventView = () => {
 
         if (responsesError) throw responsesError;
 
-        setResponses(responsesData.map(r => ({
-          id: r.id,
-          participantName: r.participant_name,
-          availability: r.availability as Record<string, boolean>,
-          updatedAt: r.updated_at
-        })));
+        // Decrypt participant names if encrypted
+        const decryptedResponses = await Promise.all(
+          responsesData.map(async (r) => {
+            let participantName = r.participant_name;
+            if (encryptionKey && isEncrypted(r.participant_name)) {
+              try {
+                participantName = await decryptText(r.participant_name, encryptionKey);
+              } catch {
+                participantName = '[Encrypted]';
+              }
+            }
+            return {
+              id: r.id,
+              participantName,
+              availability: r.availability as Record<string, boolean>,
+              updatedAt: r.updated_at
+            };
+          })
+        );
 
+        setResponses(decryptedResponses);
       } catch (error) {
         console.error('Error fetching event:', error);
         toast({
@@ -88,16 +139,24 @@ const EventView = () => {
           description: "Failed to load event. Please check the URL and try again.",
           variant: "destructive"
         });
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchEvent();
-  }, [eventId, toast]);
+  }, [eventId, encryptionKey, toast]);
 
   const handleJoinEvent = async () => {
     if (!participantName.trim()) return;
     
     try {
+      // For encrypted events, we need to encrypt the participant name before checking
+      let nameToCheck = participantName.trim();
+      if (encryptionKey) {
+        nameToCheck = await encryptText(participantName.trim(), encryptionKey);
+      }
+      
       // Verify with edge function if participant exists and check password
       const response = await fetch('https://raxgcndwtqphoxoagthf.supabase.co/functions/v1/manage-response', {
         method: 'POST',
@@ -105,7 +164,7 @@ const EventView = () => {
         body: JSON.stringify({
           action: 'verify',
           eventId,
-          participantName: participantName.trim(),
+          participantName: nameToCheck,
           password: participantPassword || undefined
         })
       });
@@ -132,7 +191,7 @@ const EventView = () => {
         throw new Error(result.error);
       }
 
-      // Check if participant already exists
+      // Check if participant already exists (compare decrypted names)
       const existing = responses.find(r => r.participantName === participantName.trim());
       if (existing) {
         setUserResponse(existing);
@@ -188,12 +247,18 @@ const EventView = () => {
     if (!userResponse || !eventId) return;
     
     try {
-      // Check if user response already exists in the database
+      // Encrypt participant name if we have an encryption key
+      let nameToSave = userResponse.participantName;
+      if (encryptionKey) {
+        nameToSave = await encryptText(userResponse.participantName, encryptionKey);
+      }
+      
+      // Check if user response already exists in the database (using encrypted name)
       const { data: existingResponseData } = await supabase
         .from('responses_public')
         .select('id')
         .eq('event_id', eventId)
-        .eq('participant_name', userResponse.participantName)
+        .eq('participant_name', nameToSave)
         .maybeSingle();
       
       const action = existingResponseData ? 'update' : 'create';
@@ -205,7 +270,7 @@ const EventView = () => {
         body: JSON.stringify({
           action,
           eventId,
-          participantName: userResponse.participantName,
+          participantName: nameToSave,
           password: participantPassword || undefined,
           availability: userResponse.availability
         })
@@ -241,12 +306,27 @@ const EventView = () => {
         
       if (fetchError) throw fetchError;
       
-      setResponses(responsesData.map(r => ({
-        id: r.id,
-        participantName: r.participant_name,
-        availability: r.availability as Record<string, boolean>,
-        updatedAt: r.updated_at
-      })));
+      // Decrypt participant names
+      const decryptedResponses = await Promise.all(
+        responsesData.map(async (r) => {
+          let participantName = r.participant_name;
+          if (encryptionKey && isEncrypted(r.participant_name)) {
+            try {
+              participantName = await decryptText(r.participant_name, encryptionKey);
+            } catch {
+              participantName = '[Encrypted]';
+            }
+          }
+          return {
+            id: r.id,
+            participantName,
+            availability: r.availability as Record<string, boolean>,
+            updatedAt: r.updated_at
+          };
+        })
+      );
+      
+      setResponses(decryptedResponses);
       
       toast({
         title: "Availability saved",
@@ -280,7 +360,7 @@ const EventView = () => {
     });
   };
 
-  if (!event) {
+  if (isLoading || !event) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
@@ -293,18 +373,45 @@ const EventView = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Decryption Warning */}
+      {decryptionError && (
+        <div className="bg-destructive/10 border-b border-destructive/30">
+          <div className="container mx-auto px-4 py-3">
+            <div className="flex items-center gap-3 text-destructive">
+              <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+              <div>
+                <p className="font-medium">Cannot decrypt event data</p>
+                <p className="text-sm opacity-80">
+                  This event is encrypted. Make sure you have the complete link including the encryption key after the #.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* Header */}
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <CalendarDays className="w-5 h-5 text-primary-foreground" />
+                {encryptionKey ? (
+                  <Lock className="w-5 h-5 text-primary-foreground" />
+                ) : (
+                  <CalendarDays className="w-5 h-5 text-primary-foreground" />
+                )}
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-foreground">{event.title}</h1>
                 {event.description && (
                   <p className="text-muted-foreground">{event.description}</p>
+                )}
+                {encryptionKey && !decryptionError && (
+                  <p className="text-xs text-primary flex items-center gap-1 mt-1">
+                    <Lock className="w-3 h-3" />
+                    End-to-end encrypted
+                  </p>
                 )}
               </div>
             </div>
