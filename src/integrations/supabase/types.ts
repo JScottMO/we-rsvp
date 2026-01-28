@@ -93,7 +93,41 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      responses_public: {
+        Row: {
+          availability: Json | null
+          created_at: string | null
+          event_id: string | null
+          id: string | null
+          participant_name: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          availability?: Json | null
+          created_at?: string | null
+          event_id?: string | null
+          id?: string | null
+          participant_name?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          availability?: Json | null
+          created_at?: string | null
+          event_id?: string | null
+          id?: string | null
+          participant_name?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "responses_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       [_ in never]: never

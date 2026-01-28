@@ -1,1 +1,4 @@
 project_id = "raxgcndwtqphoxoagthf"
+
+[functions.manage-response]
+verify_jwt = false
