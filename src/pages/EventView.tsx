@@ -80,8 +80,8 @@ const EventView = () => {
               decryptedDescription = await decryptText(eventData.description, encryptionKey);
             }
             setDecryptionError(false);
-          } catch (error) {
-            console.error('Decryption failed:', error);
+          } catch {
+            // Decryption error - invalid key, don't log details
             setDecryptionError(true);
             decryptedTitle = '[Encrypted - Invalid key]';
             decryptedDescription = '';
@@ -132,8 +132,8 @@ const EventView = () => {
         );
 
         setResponses(decryptedResponses);
-      } catch (error) {
-        console.error('Error fetching event:', error);
+      } catch {
+        // Error fetching event - don't expose details
         toast({
           title: "Error",
           description: "Failed to load event. Please check the URL and try again.",
@@ -157,37 +157,38 @@ const EventView = () => {
         nameToCheck = await encryptText(participantName.trim(), encryptionKey);
       }
       
-      // Verify with edge function if participant exists and check password
-      const response = await fetch('https://raxgcndwtqphoxoagthf.supabase.co/functions/v1/manage-response', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      // Use Supabase client's functions.invoke for proper URL handling
+      const { data: result, error: funcError } = await supabase.functions.invoke('manage-response', {
+        body: {
           action: 'verify',
           eventId,
           participantName: nameToCheck,
           password: participantPassword || undefined
-        })
+        }
       });
 
-      const result = await response.json();
+      if (funcError) {
+        throw funcError;
+      }
 
-      if (!response.ok) {
-        if (result.requiresPassword) {
-          toast({
-            title: "Password required",
-            description: "This participant has a password. Please enter it to edit.",
-            variant: "destructive"
-          });
-          return;
-        }
-        if (result.error === 'Invalid password') {
-          toast({
-            title: "Invalid password",
-            description: "The password you entered is incorrect.",
-            variant: "destructive"
-          });
-          return;
-        }
+      // Check for password requirements from result
+      if (result?.requiresPassword) {
+        toast({
+          title: "Password required",
+          description: "This participant has a password. Please enter it to edit.",
+          variant: "destructive"
+        });
+        return;
+      }
+      if (result?.error === 'Invalid password') {
+        toast({
+          title: "Invalid password",
+          description: "The password you entered is incorrect.",
+          variant: "destructive"
+        });
+        return;
+      }
+      if (result?.error) {
         throw new Error(result.error);
       }
 
@@ -208,8 +209,8 @@ const EventView = () => {
         setIsEditing(true);
       }
       setShowJoinDialog(false);
-    } catch (error) {
-      console.error('Error verifying participant:', error);
+    } catch {
+      // Error verifying participant - don't expose details
       toast({
         title: "Error",
         description: "Failed to verify participant. Please try again.",
@@ -263,23 +264,20 @@ const EventView = () => {
       
       const action = existingResponseData ? 'update' : 'create';
       
-      // Use secure edge function for create/update
-      const response = await fetch('https://raxgcndwtqphoxoagthf.supabase.co/functions/v1/manage-response', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      // Use Supabase client's functions.invoke for proper URL handling
+      const { data: saveResult, error: saveError } = await supabase.functions.invoke('manage-response', {
+        body: {
           action,
           eventId,
           participantName: nameToSave,
           password: participantPassword || undefined,
           availability: userResponse.availability
-        })
+        }
       });
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        if (response.status === 429) {
+      if (saveError) {
+        // Check for rate limiting
+        if (saveError.message?.includes('429') || saveError.message?.includes('rate limit')) {
           toast({
             title: "Too many requests",
             description: "Please wait a moment before trying again.",
@@ -287,15 +285,20 @@ const EventView = () => {
           });
           return;
         }
-        if (result.requiresPassword) {
-          toast({
-            title: "Password required",
-            description: "This response is password protected. Please enter the correct password.",
-            variant: "destructive"
-          });
-          return;
-        }
-        throw new Error(result.error || 'Failed to save response');
+        throw saveError;
+      }
+
+      if (saveResult?.requiresPassword) {
+        toast({
+          title: "Password required",
+          description: "This response is password protected. Please enter the correct password.",
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      if (saveResult?.error) {
+        throw new Error(saveResult.error);
       }
       
       // Refetch responses to get latest data from secure view
@@ -334,11 +337,11 @@ const EventView = () => {
       });
       setIsEditing(false);
       setParticipantPassword(''); // Clear password after use
-    } catch (error) {
-      console.error('Error saving response:', error);
+    } catch {
+      // Error saving response - don't expose details
       toast({
         title: "Error", 
-        description: error instanceof Error ? error.message : "Failed to save your response. Please try again.",
+        description: "Failed to save your response. Please try again.",
         variant: "destructive"
       });
     }
