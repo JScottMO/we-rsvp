@@ -75,8 +75,8 @@ export async function decryptText(ciphertext: string, keyBase64: string): Promis
     
     const decoder = new TextDecoder();
     return decoder.decode(decrypted);
-  } catch (error) {
-    console.error('Decryption failed:', error);
+  } catch {
+    // Don't log decryption errors to avoid exposing implementation details
     throw new Error('Failed to decrypt data. The encryption key may be incorrect.');
   }
 }

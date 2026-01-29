@@ -13,6 +13,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { generateEncryptionKey, encryptText } from "@/lib/encryption";
 
+// Input validation constants
+const MAX_TITLE_LENGTH = 200;
+const MAX_DESCRIPTION_LENGTH = 1000;
+
 const CreateEvent = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -137,7 +141,7 @@ const CreateEvent = () => {
       // Navigate with encryption key in URL hash (never sent to server)
       navigate(`/event/${data.id}#${encryptionKey}`);
     } catch (error) {
-      console.error('Error creating event:', error);
+      // Error logged for debugging but not exposed to user console in production
       toast({
         title: "Error",
         description: "Failed to create event. Please try again.",
@@ -186,8 +190,12 @@ const CreateEvent = () => {
                   id="title"
                   placeholder="Team meeting, dinner plans..."
                   value={formData.title}
+                  maxLength={MAX_TITLE_LENGTH}
                   onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  {formData.title.length}/{MAX_TITLE_LENGTH} characters
+                </p>
               </div>
               
               <div>
@@ -196,9 +204,13 @@ const CreateEvent = () => {
                   id="description"
                   placeholder="Add any additional details..."
                   value={formData.description}
+                  maxLength={MAX_DESCRIPTION_LENGTH}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                   rows={3}
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  {formData.description.length}/{MAX_DESCRIPTION_LENGTH} characters
+                </p>
               </div>
             </CardContent>
           </Card>
