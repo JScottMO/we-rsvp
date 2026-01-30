@@ -156,50 +156,69 @@ const EventView = () => {
     if (!participantName.trim()) return;
     
     try {
-      // For encrypted events, we need to encrypt the participant name before checking
-      let nameToCheck = participantName.trim();
-      if (encryptionKey) {
-        nameToCheck = await encryptText(participantName.trim(), encryptionKey);
-      }
+      // Check if participant already exists by comparing decrypted names in our local state
+      // (responses already have decrypted names from the fetch)
+      const existing = responses.find(r => r.participantName.toLowerCase() === participantName.trim().toLowerCase());
       
-      // Use Supabase client's functions.invoke for proper URL handling
-      const { data: result, error: funcError } = await supabase.functions.invoke('manage-response', {
-        body: {
-          action: 'verify',
-          eventId,
-          participantName: nameToCheck,
-          password: participantPassword || undefined
-        }
-      });
-
-      if (funcError) {
-        throw funcError;
-      }
-
-      // Check for password requirements from result
-      if (result?.requiresPassword) {
-        toast({
-          title: "Password required",
-          description: "This participant has a password. Please enter it to edit.",
-          variant: "destructive"
-        });
-        return;
-      }
-      if (result?.error === 'Invalid password') {
-        toast({
-          title: "Invalid password",
-          description: "The password you entered is incorrect.",
-          variant: "destructive"
-        });
-        return;
-      }
-      if (result?.error) {
-        throw new Error(result.error);
-      }
-
-      // Check if participant already exists (compare decrypted names)
-      const existing = responses.find(r => r.participantName === participantName.trim());
       if (existing) {
+        // For existing participants, we need to verify password via edge function
+        // We need to find the encrypted name from the database to verify
+        const { data: responsesData } = await supabase
+          .from('responses_public')
+          .select('id, participant_name')
+          .eq('event_id', eventId);
+        
+        // Find the matching encrypted name by decrypting all and comparing
+        let encryptedName = participantName.trim();
+        if (encryptionKey && responsesData) {
+          for (const r of responsesData) {
+            if (isEncrypted(r.participant_name)) {
+              try {
+                const decrypted = await decryptText(r.participant_name, encryptionKey);
+                if (decrypted.toLowerCase() === participantName.trim().toLowerCase()) {
+                  encryptedName = r.participant_name;
+                  break;
+                }
+              } catch {
+                // Skip if can't decrypt
+              }
+            } else if (r.participant_name.toLowerCase() === participantName.trim().toLowerCase()) {
+              encryptedName = r.participant_name;
+              break;
+            }
+          }
+        }
+        
+        // Verify with edge function using the encrypted name
+        const { data: result, error: funcError } = await supabase.functions.invoke('manage-response', {
+          body: {
+            action: 'verify',
+            eventId,
+            participantName: encryptedName,
+            password: participantPassword || undefined
+          }
+        });
+
+        if (funcError) throw funcError;
+
+        if (result?.requiresPassword) {
+          toast({
+            title: "Password required",
+            description: "This participant has a password. Please enter it to edit.",
+            variant: "destructive"
+          });
+          return;
+        }
+        if (result?.error === 'Invalid password') {
+          toast({
+            title: "Invalid password",
+            description: "The password you entered is incorrect.",
+            variant: "destructive"
+          });
+          return;
+        }
+        if (result?.error) throw new Error(result.error);
+
         setUserResponse(existing);
         setIsEditing(true);
       } else {
@@ -215,7 +234,6 @@ const EventView = () => {
       }
       setShowJoinDialog(false);
     } catch {
-      // Error verifying participant - don't expose details
       toast({
         title: "Error",
         description: "Failed to verify participant. Please try again.",
@@ -253,21 +271,43 @@ const EventView = () => {
     if (!userResponse || !eventId) return;
     
     try {
-      // Encrypt participant name if we have an encryption key
+      // First, fetch all responses to find if this participant already exists
+      const { data: existingResponses } = await supabase
+        .from('responses_public')
+        .select('id, participant_name')
+        .eq('event_id', eventId);
+      
+      // Find the matching encrypted name by decrypting all and comparing
       let nameToSave = userResponse.participantName;
-      if (encryptionKey) {
+      let existingResponseId: string | null = null;
+      
+      if (existingResponses) {
+        for (const r of existingResponses) {
+          if (encryptionKey && isEncrypted(r.participant_name ?? '')) {
+            try {
+              const decrypted = await decryptText(r.participant_name ?? '', encryptionKey);
+              if (decrypted.toLowerCase() === userResponse.participantName.toLowerCase()) {
+                nameToSave = r.participant_name ?? userResponse.participantName; // Use existing encrypted name
+                existingResponseId = r.id ?? null;
+                break;
+              }
+            } catch {
+              // Skip if can't decrypt
+            }
+          } else if ((r.participant_name ?? '').toLowerCase() === userResponse.participantName.toLowerCase()) {
+            nameToSave = r.participant_name ?? userResponse.participantName;
+            existingResponseId = r.id ?? null;
+            break;
+          }
+        }
+      }
+      
+      // If new participant and encryption is enabled, encrypt the name
+      if (!existingResponseId && encryptionKey) {
         nameToSave = await encryptText(userResponse.participantName, encryptionKey);
       }
       
-      // Check if user response already exists in the database (using encrypted name)
-      const { data: existingResponseData } = await supabase
-        .from('responses_public')
-        .select('id')
-        .eq('event_id', eventId)
-        .eq('participant_name', nameToSave)
-        .maybeSingle();
-      
-      const action = existingResponseData ? 'update' : 'create';
+      const action = existingResponseId ? 'update' : 'create';
       
       // Use Supabase client's functions.invoke for proper URL handling
       const { data: saveResult, error: saveError } = await supabase.functions.invoke('manage-response', {
@@ -307,7 +347,7 @@ const EventView = () => {
       }
       
       // Refetch responses to get latest data from secure view
-      const { data: responsesData, error: fetchError } = await supabase
+      const { data: refreshedResponses, error: fetchError } = await supabase
         .from('responses_public')
         .select('*')
         .eq('event_id', eventId);
@@ -316,20 +356,20 @@ const EventView = () => {
       
       // Decrypt participant names
       const decryptedResponses = await Promise.all(
-        responsesData.map(async (r) => {
-          let participantName = r.participant_name;
-          if (encryptionKey && isEncrypted(r.participant_name)) {
+        (refreshedResponses ?? []).map(async (r) => {
+          let pName = r.participant_name ?? '';
+          if (encryptionKey && isEncrypted(pName)) {
             try {
-              participantName = await decryptText(r.participant_name, encryptionKey);
+              pName = await decryptText(pName, encryptionKey);
             } catch {
-              participantName = '[Encrypted]';
+              pName = '[Encrypted]';
             }
           }
           return {
-            id: r.id,
-            participantName,
-            availability: r.availability as Record<string, boolean>,
-            updatedAt: r.updated_at
+            id: r.id ?? '',
+            participantName: pName,
+            availability: (r.availability ?? {}) as Record<string, boolean>,
+            updatedAt: r.updated_at ?? new Date().toISOString()
           };
         })
       );
