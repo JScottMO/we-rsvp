@@ -35,8 +35,16 @@ const EventView = () => {
   const location = useLocation();
   const { toast } = useToast();
   
-  // Get encryption key synchronously on initial render to avoid race condition
-  const initialKey = getKeyFromHash();
+  // Get encryption key from both location.hash (preferred) and window.location.hash (fallback)
+  // This handles the race condition where react-router's location may not have the hash yet
+  const getEncryptionKey = (): string | null => {
+    // First try location.hash from react-router
+    if (location.hash && location.hash.length > 1) {
+      return location.hash.slice(1);
+    }
+    // Fallback to window.location.hash for initial navigation
+    return getKeyFromHash();
+  };
   
   const [event, setEvent] = useState<Event | null>(null);
   const [responses, setResponses] = useState<Response[]>([]);
@@ -45,17 +53,17 @@ const EventView = () => {
   const [participantPassword, setParticipantPassword] = useState("");
   const [showJoinDialog, setShowJoinDialog] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [encryptionKey, setEncryptionKey] = useState<string | null>(initialKey);
+  const [encryptionKey, setEncryptionKey] = useState<string | null>(() => getEncryptionKey());
   const [decryptionError, setDecryptionError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   // Update encryption key if hash changes (for navigation within SPA)
   useEffect(() => {
-    const key = getKeyFromHash();
-    if (key !== encryptionKey) {
+    const key = getEncryptionKey();
+    if (key && key !== encryptionKey) {
       setEncryptionKey(key);
     }
-  }, [location.hash, encryptionKey]);
+  }, [location.hash]);
 
   // Fetch event and responses from Supabase
   useEffect(() => {
