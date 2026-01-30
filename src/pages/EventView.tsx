@@ -5,12 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Share2, Users, Download, CalendarDays, Clock, Lock, AlertTriangle } from "lucide-react";
+import { Share2, Users, Download, CalendarDays, Clock, Lock, AlertTriangle, CalendarCheck } from "lucide-react";
 import { AvailabilityGrid } from "@/components/AvailabilityGrid";
 import { ParticipantList } from "@/components/ParticipantList";
+import { FinalizeEventDialog } from "@/components/FinalizeEventDialog";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { decryptText, encryptText, isEncrypted, getKeyFromHash } from "@/lib/encryption";
+import { format, parseISO } from "date-fns";
 
 interface Event {
   id: string;
@@ -21,6 +23,9 @@ interface Event {
   latestTime: string;
   timeIncrement: number;
   weekStartDay: number;
+  isFinalized: boolean;
+  finalizedDate?: string;
+  finalizedTime?: string;
 }
 
 interface Response {
@@ -52,6 +57,7 @@ const EventView = () => {
   const [participantName, setParticipantName] = useState("");
   const [participantPassword, setParticipantPassword] = useState("");
   const [showJoinDialog, setShowJoinDialog] = useState(false);
+  const [showFinalizeDialog, setShowFinalizeDialog] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [encryptionKey, setEncryptionKey] = useState<string | null>(() => getEncryptionKey());
   const [decryptionError, setDecryptionError] = useState(false);
@@ -113,7 +119,10 @@ const EventView = () => {
           earliestTime: eventData.earliest_time,
           latestTime: eventData.latest_time,
           timeIncrement: eventData.time_increment,
-          weekStartDay: eventData.week_start_day
+          weekStartDay: eventData.week_start_day,
+          isFinalized: eventData.is_finalized || false,
+          finalizedDate: eventData.finalized_date || undefined,
+          finalizedTime: eventData.finalized_time || undefined,
         });
 
         // Fetch responses from the secure view (excludes password_hash)
@@ -434,6 +443,44 @@ const EventView = () => {
     });
   };
 
+  const handleFinalizeEvent = async (date: string, startTime: string, endTime: string) => {
+    if (!eventId) return;
+    
+    try {
+      const { error } = await supabase
+        .from('events')
+        .update({
+          is_finalized: true,
+          finalized_date: date,
+          finalized_time: `${startTime}-${endTime}`
+        })
+        .eq('id', eventId);
+
+      if (error) throw error;
+
+      // Update local state
+      setEvent(prev => prev ? {
+        ...prev,
+        isFinalized: true,
+        finalizedDate: date,
+        finalizedTime: `${startTime}-${endTime}`
+      } : null);
+
+      toast({
+        title: "Event finalized",
+        description: "The event has been closed. No more responses will be accepted."
+      });
+    } catch (error) {
+      console.error('Failed to finalize event:', error);
+      toast({
+        title: "Error",
+        description: "Failed to finalize the event. Please try again.",
+        variant: "destructive"
+      });
+      throw error;
+    }
+  };
+
   const exportToCalendar = () => {
     // TODO: Generate .ics file
     toast({
@@ -455,6 +502,26 @@ const EventView = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Finalized Event Banner */}
+      {event.isFinalized && event.finalizedDate && event.finalizedTime && (
+        <div className="bg-primary/10 border-b border-primary/30">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center gap-3 text-primary">
+              <CalendarCheck className="w-5 h-5 flex-shrink-0" />
+              <div>
+                <p className="font-medium">Event confirmed!</p>
+                <p className="text-sm">
+                  {format(parseISO(event.finalizedDate), 'EEEE, MMMM d, yyyy')} at{' '}
+                  {event.finalizedTime.split('-').map(t => 
+                    format(new Date(`2000-01-01T${t}`), 'h:mm a')
+                  ).join(' - ')}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Decryption Warning */}
       {decryptionError && (
         <div className="bg-destructive/10 border-b border-destructive/30">
@@ -478,7 +545,9 @@ const EventView = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                {encryptionKey ? (
+                {event.isFinalized ? (
+                  <CalendarCheck className="w-5 h-5 text-primary-foreground" />
+                ) : encryptionKey ? (
                   <Lock className="w-5 h-5 text-primary-foreground" />
                 ) : (
                   <CalendarDays className="w-5 h-5 text-primary-foreground" />
@@ -497,15 +566,22 @@ const EventView = () => {
                 )}
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={copyEventLink}>
-                <Share2 className="w-4 h-4 mr-2" />
-                Share
-              </Button>
-              <Button variant="outline" size="sm" onClick={exportToCalendar}>
-                <Download className="w-4 h-4 mr-2" />
-                Export
-              </Button>
+            <div className="flex flex-col items-end gap-2">
+              <div className="flex items-center gap-2">
+                <Button variant="outline" size="sm" onClick={copyEventLink}>
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Share
+                </Button>
+                <Button variant="outline" size="sm" onClick={exportToCalendar}>
+                  <Download className="w-4 h-4 mr-2" />
+                  Export
+                </Button>
+              </div>
+              {!event.isFinalized && (
+                <p className="text-xs text-muted-foreground">
+                  Share this link to find the best time!
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -553,7 +629,7 @@ const EventView = () => {
           </div>
 
           {/* First-time user guidance */}
-          {!isEditing && responses.length === 0 && (
+          {!isEditing && !event.isFinalized && responses.length === 0 && (
             <Card className="mb-8 bg-muted/50 border-dashed">
               <CardContent className="pt-6">
                 <h3 className="font-semibold text-lg mb-2">👋 Welcome! Here's how it works:</h3>
@@ -563,7 +639,7 @@ const EventView = () => {
                   <li><strong>Save your response</strong> — the grid will show where everyone overlaps.</li>
                 </ol>
                 <p className="text-sm text-muted-foreground mt-3">
-                  The greener a time slot, the more people are free. Share this link with others to find the best time!
+                  The greener a time slot, the more people are free.
                 </p>
               </CardContent>
             </Card>
@@ -575,7 +651,7 @@ const EventView = () => {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                   <CardTitle>Availability</CardTitle>
-                  {!isEditing && (
+                  {!isEditing && !event.isFinalized && (
                     <Dialog open={showJoinDialog} onOpenChange={setShowJoinDialog}>
                       <DialogTrigger asChild>
                         <Button>
@@ -620,6 +696,12 @@ const EventView = () => {
                       </DialogContent>
                     </Dialog>
                   )}
+                  {event.isFinalized && (
+                    <span className="text-sm text-muted-foreground flex items-center gap-1">
+                      <Lock className="w-3 h-3" />
+                      Event closed
+                    </span>
+                  )}
                 </CardHeader>
                 <CardContent>
                   <AvailabilityGrid
@@ -630,9 +712,19 @@ const EventView = () => {
                     onAvailabilityChange={handleAvailabilityChange}
                   />
                   {isEditing && (
-                    <div className="flex gap-2 mt-4">
+                    <div className="flex flex-wrap gap-2 mt-4">
                       <Button onClick={handleSaveResponse}>
                         Save response
+                      </Button>
+                      <Button 
+                        variant="secondary"
+                        onClick={() => {
+                          handleSaveResponse();
+                          setShowFinalizeDialog(true);
+                        }}
+                      >
+                        <CalendarCheck className="w-4 h-4 mr-2" />
+                        Save & finalize event
                       </Button>
                       <Button 
                         variant="outline" 
@@ -653,6 +745,14 @@ const EventView = () => {
           </div>
         </div>
       </main>
+
+      {/* Finalize Event Dialog */}
+      <FinalizeEventDialog
+        open={showFinalizeDialog}
+        onOpenChange={setShowFinalizeDialog}
+        event={event}
+        onFinalize={handleFinalizeEvent}
+      />
     </div>
   );
 };
