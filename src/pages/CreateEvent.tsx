@@ -290,7 +290,6 @@ const CreateEvent = () => {
               <CardTitle>Select dates *</CardTitle>
               <p className="text-sm text-muted-foreground mt-1">
                 Pick the days you're considering for your event. Participants will mark their availability for each selected date.
-                <span className="block mt-1 text-xs italic">Example: Select Monday, Wednesday, and Friday to find the best day for a recurring meeting.</span>
               </p>
             </CardHeader>
             <CardContent className="space-y-4">
