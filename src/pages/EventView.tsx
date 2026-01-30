@@ -35,6 +35,9 @@ const EventView = () => {
   const location = useLocation();
   const { toast } = useToast();
   
+  // Get encryption key synchronously on initial render to avoid race condition
+  const initialKey = getKeyFromHash();
+  
   const [event, setEvent] = useState<Event | null>(null);
   const [responses, setResponses] = useState<Response[]>([]);
   const [userResponse, setUserResponse] = useState<Response | null>(null);
@@ -42,15 +45,17 @@ const EventView = () => {
   const [participantPassword, setParticipantPassword] = useState("");
   const [showJoinDialog, setShowJoinDialog] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [encryptionKey, setEncryptionKey] = useState<string | null>(null);
+  const [encryptionKey, setEncryptionKey] = useState<string | null>(initialKey);
   const [decryptionError, setDecryptionError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Extract encryption key from URL hash
+  // Update encryption key if hash changes (for navigation within SPA)
   useEffect(() => {
     const key = getKeyFromHash();
-    setEncryptionKey(key);
-  }, [location.hash]);
+    if (key !== encryptionKey) {
+      setEncryptionKey(key);
+    }
+  }, [location.hash, encryptionKey]);
 
   // Fetch event and responses from Supabase
   useEffect(() => {
