@@ -107,15 +107,22 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Privacy Notice */}
-          <div className="bg-muted rounded-lg p-6 text-center">
-            <p className="text-sm text-muted-foreground mb-2">
-              Part of the "Websites That Give" project
-            </p>
-            <p className="text-xs text-muted-foreground">
-              Most ad revenue is donated to charity. Learn more about privacy-first scheduling.
-            </p>
-          </div>
+          {/* Prof C Attribution */}
+          <a 
+            href="https://christiansonjs.com/links/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="bg-muted rounded-lg p-6 flex items-center justify-center gap-3 hover:bg-muted/80 transition-colors"
+          >
+            <img 
+              src="https://christiansonjs.com/wp-content/uploads/2024/04/cropped-Prof_C_Circular.png" 
+              alt="Prof C Logo" 
+              className="w-10 h-10 rounded-full"
+            />
+            <span className="text-sm text-muted-foreground">
+              Courtesy of Prof C
+            </span>
+          </a>
         </div>
       </main>
     </div>
