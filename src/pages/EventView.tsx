@@ -552,6 +552,23 @@ const EventView = () => {
             </Card>
           </div>
 
+          {/* First-time user guidance */}
+          {!isEditing && responses.length === 0 && (
+            <Card className="mb-8 bg-muted/50 border-dashed">
+              <CardContent className="pt-6">
+                <h3 className="font-semibold text-lg mb-2">👋 Welcome! Here's how it works:</h3>
+                <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
+                  <li><strong>Click "Join event"</strong> to add your name and start selecting times.</li>
+                  <li><strong>Click or drag on the grid</strong> to mark when you're available.</li>
+                  <li><strong>Save your response</strong> — the grid will show where everyone overlaps.</li>
+                </ol>
+                <p className="text-sm text-muted-foreground mt-3">
+                  The greener a time slot, the more people are free. Share this link with others to find the best time!
+                </p>
+              </CardContent>
+            </Card>
+          )}
+
           <div className="grid lg:grid-cols-4 gap-8">
             {/* Availability Grid */}
             <div className="lg:col-span-3">
