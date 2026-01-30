@@ -182,6 +182,10 @@ const CreateEvent = () => {
           <Card>
             <CardHeader>
               <CardTitle>Event details</CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">
+                Give your event a name so participants know what they're scheduling. 
+                <span className="block mt-1 text-xs italic">Example: "Team Weekly Sync" or "Sarah's Birthday Dinner"</span>
+              </p>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -219,6 +223,10 @@ const CreateEvent = () => {
           <Card>
             <CardHeader>
               <CardTitle>Time settings</CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">
+                Define the time window participants can choose from. The grid will show slots between earliest and latest times.
+                <span className="block mt-1 text-xs italic">Example: 9 AM to 5 PM with 30-minute slots creates 16 time options per day.</span>
+              </p>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -280,6 +288,10 @@ const CreateEvent = () => {
           <Card>
             <CardHeader>
               <CardTitle>Select dates *</CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">
+                Pick the days you're considering for your event. Participants will mark their availability for each selected date.
+                <span className="block mt-1 text-xs italic">Example: Select Monday, Wednesday, and Friday to find the best day for a recurring meeting.</span>
+              </p>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Quick date options */}
