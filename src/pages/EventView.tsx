@@ -279,11 +279,23 @@ const EventView = () => {
     if (!userResponse || !eventId) return;
     
     try {
+      console.log('handleSaveResponse called with:', { 
+        participantName: userResponse.participantName, 
+        availability: userResponse.availability,
+        encryptionKey: encryptionKey ? 'present' : 'missing'
+      });
+      
       // First, fetch all responses to find if this participant already exists
-      const { data: existingResponses } = await supabase
+      const { data: existingResponses, error: fetchExistingError } = await supabase
         .from('responses_public')
         .select('id, participant_name')
         .eq('event_id', eventId);
+      
+      if (fetchExistingError) {
+        console.error('Error fetching existing responses:', fetchExistingError);
+      }
+      
+      console.log('Existing responses:', existingResponses);
       
       // Find the matching encrypted name by decrypting all and comparing
       let nameToSave = userResponse.participantName;
@@ -297,6 +309,7 @@ const EventView = () => {
               if (decrypted.toLowerCase() === userResponse.participantName.toLowerCase()) {
                 nameToSave = r.participant_name ?? userResponse.participantName; // Use existing encrypted name
                 existingResponseId = r.id ?? null;
+                console.log('Found matching encrypted response:', { id: existingResponseId, decrypted });
                 break;
               }
             } catch {
@@ -305,6 +318,7 @@ const EventView = () => {
           } else if ((r.participant_name ?? '').toLowerCase() === userResponse.participantName.toLowerCase()) {
             nameToSave = r.participant_name ?? userResponse.participantName;
             existingResponseId = r.id ?? null;
+            console.log('Found matching plaintext response:', { id: existingResponseId });
             break;
           }
         }
@@ -313,9 +327,11 @@ const EventView = () => {
       // If new participant and encryption is enabled, encrypt the name
       if (!existingResponseId && encryptionKey) {
         nameToSave = await encryptText(userResponse.participantName, encryptionKey);
+        console.log('Encrypted new participant name');
       }
       
       const action = existingResponseId ? 'update' : 'create';
+      console.log('Calling edge function with:', { action, eventId, nameToSave: nameToSave.substring(0, 20) + '...', availability: userResponse.availability });
       
       // Use Supabase client's functions.invoke for proper URL handling
       const { data: saveResult, error: saveError } = await supabase.functions.invoke('manage-response', {
@@ -328,7 +344,10 @@ const EventView = () => {
         }
       });
 
+      console.log('Edge function response:', { saveResult, saveError });
+
       if (saveError) {
+        console.error('Save error:', saveError);
         // Check for rate limiting
         if (saveError.message?.includes('429') || saveError.message?.includes('rate limit')) {
           toast({
@@ -351,6 +370,7 @@ const EventView = () => {
       }
       
       if (saveResult?.error) {
+        console.error('Save result error:', saveResult.error);
         throw new Error(saveResult.error);
       }
       
@@ -360,7 +380,12 @@ const EventView = () => {
         .select('*')
         .eq('event_id', eventId);
         
-      if (fetchError) throw fetchError;
+      if (fetchError) {
+        console.error('Error fetching refreshed responses:', fetchError);
+        throw fetchError;
+      }
+      
+      console.log('Refreshed responses:', refreshedResponses);
       
       // Decrypt participant names
       const decryptedResponses = await Promise.all(
@@ -390,8 +415,9 @@ const EventView = () => {
       });
       setIsEditing(false);
       setParticipantPassword(''); // Clear password after use
-    } catch {
-      // Error saving response - don't expose details
+    } catch (err) {
+      // Error saving response - log for debugging
+      console.error('handleSaveResponse error:', err);
       toast({
         title: "Error", 
         description: "Failed to save your response. Please try again.",
