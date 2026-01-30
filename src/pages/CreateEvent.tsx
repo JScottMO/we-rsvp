@@ -289,7 +289,7 @@ const CreateEvent = () => {
             <CardHeader>
               <CardTitle>Select dates *</CardTitle>
               <p className="text-sm text-muted-foreground mt-1">
-                Pick the days you're considering for your event. Participants will mark their availability for each selected date.
+                Pick the days you're considering for your event. Participants will indicate their availability for each selected date.
               </p>
             </CardHeader>
             <CardContent className="space-y-4">
