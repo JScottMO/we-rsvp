@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarDays, Clock, Users, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import profCLogo from "@/assets/prof-c-logo.png";
 
 const Index = () => {
   const [eventTitle, setEventTitle] = useState("");
@@ -115,9 +116,9 @@ const Index = () => {
             className="bg-muted rounded-lg p-6 flex items-center justify-center gap-3 hover:bg-muted/80 transition-colors"
           >
             <img 
-              src="https://christiansonjs.com/wp-content/uploads/2024/04/cropped-Prof_C_Circular.png" 
+              src={profCLogo} 
               alt="Prof C Logo" 
-              className="w-10 h-10 rounded-full"
+              className="w-12 h-12"
             />
             <span className="text-sm text-muted-foreground">
               Courtesy of Prof C
