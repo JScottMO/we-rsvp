@@ -20,10 +20,7 @@ export type Database = {
           date_options: string[]
           description: string | null
           earliest_time: string
-          finalized_date: string | null
-          finalized_time: string | null
           id: string
-          is_finalized: boolean
           latest_time: string
           time_increment: number
           title: string
@@ -35,10 +32,7 @@ export type Database = {
           date_options: string[]
           description?: string | null
           earliest_time?: string
-          finalized_date?: string | null
-          finalized_time?: string | null
           id?: string
-          is_finalized?: boolean
           latest_time?: string
           time_increment?: number
           title: string
@@ -50,10 +44,7 @@ export type Database = {
           date_options?: string[]
           description?: string | null
           earliest_time?: string
-          finalized_date?: string | null
-          finalized_time?: string | null
           id?: string
-          is_finalized?: boolean
           latest_time?: string
           time_increment?: number
           title?: string
