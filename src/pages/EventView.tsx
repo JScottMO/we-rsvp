@@ -718,8 +718,8 @@ const EventView = () => {
                       </Button>
                       <Button 
                         variant="secondary"
-                        onClick={() => {
-                          handleSaveResponse();
+                        onClick={async () => {
+                          await handleSaveResponse();
                           setShowFinalizeDialog(true);
                         }}
                       >
@@ -750,7 +750,15 @@ const EventView = () => {
       <FinalizeEventDialog
         open={showFinalizeDialog}
         onOpenChange={setShowFinalizeDialog}
-        event={event}
+        event={{
+          id: event.id,
+          title: event.title,
+          description: event.description,
+          dateOptions: event.dateOptions,
+          earliestTime: event.earliestTime,
+          latestTime: event.latestTime,
+          timeIncrement: event.timeIncrement,
+        }}
         onFinalize={handleFinalizeEvent}
       />
     </div>
