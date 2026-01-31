@@ -18,15 +18,19 @@ interface Props {
   responses: Response[];
   userResponse: Response | null;
   isEditing: boolean;
+  isFinalizing?: boolean;
   onAvailabilityChange: (timeSlot: string, available: boolean) => void;
+  onSlotClickForFinalize?: (date: string, time: string) => void;
 }
 
 export const AvailabilityGrid = ({ 
   event, 
   responses, 
   userResponse, 
-  isEditing, 
-  onAvailabilityChange 
+  isEditing,
+  isFinalizing = false,
+  onAvailabilityChange,
+  onSlotClickForFinalize
 }: Props) => {
   const [dragMode, setDragMode] = useState<'select' | 'deselect' | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -118,9 +122,16 @@ export const AvailabilityGrid = ({
     setDragMode(null);
   };
 
-  const handleClick = (date: string, time: string, event: React.MouseEvent) => {
+  const handleClick = (date: string, time: string, e: React.MouseEvent) => {
+    // Handle finalize mode - clicking selects a slot for finalization
+    if (isFinalizing && onSlotClickForFinalize) {
+      e.preventDefault();
+      onSlotClickForFinalize(date, time);
+      return;
+    }
+    
     if (!isEditing || dragStarted) {
-      event.preventDefault();
+      e.preventDefault();
       return;
     }
     
@@ -163,13 +174,16 @@ export const AvailabilityGrid = ({
               const consensusLevel = getConsensusLevel(date, time);
               const userAvailable = isUserAvailable(date, time);
               const canEdit = isEditing;
+              const canSelect = isFinalizing;
               
               return (
                 <div
                   key={`${date}-${time}`}
                   className={`
-                    h-8 border border-grid-border rounded cursor-pointer transition-all
+                    h-8 border border-grid-border rounded transition-all
+                    ${canEdit || canSelect ? 'cursor-pointer' : ''}
                     ${canEdit ? 'hover:bg-grid-hover' : ''}
+                    ${canSelect ? 'hover:ring-2 hover:ring-primary hover:ring-inset' : ''}
                     ${userAvailable && canEdit ? 'ring-2 ring-primary ring-inset' : ''}
                     ${getConsensusColor(consensusLevel)}
                   `}
