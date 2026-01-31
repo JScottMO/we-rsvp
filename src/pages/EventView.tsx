@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Share2, Users, Download, CalendarDays, Clock, Lock, AlertTriangle, CalendarCheck } from "lucide-react";
+import { Share2, Users, CalendarDays, Clock, Lock, AlertTriangle, CalendarCheck } from "lucide-react";
 import { AvailabilityGrid } from "@/components/AvailabilityGrid";
 import { ParticipantList } from "@/components/ParticipantList";
 import { FinalizeEventDialog } from "@/components/FinalizeEventDialog";
@@ -58,6 +58,8 @@ const EventView = () => {
   const [participantPassword, setParticipantPassword] = useState("");
   const [showJoinDialog, setShowJoinDialog] = useState(false);
   const [showFinalizeDialog, setShowFinalizeDialog] = useState(false);
+  const [isFinalizing, setIsFinalizing] = useState(false);
+  const [prefillSlot, setPrefillSlot] = useState<{ date: string; time: string } | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [encryptionKey, setEncryptionKey] = useState<string | null>(() => getEncryptionKey());
   const [decryptionError, setDecryptionError] = useState(false);
@@ -481,12 +483,23 @@ const EventView = () => {
     }
   };
 
-  const exportToCalendar = () => {
-    // TODO: Generate .ics file
+  const handleSlotClickForFinalize = (date: string, time: string) => {
+    setPrefillSlot({ date, time });
+    setShowFinalizeDialog(true);
+  };
+
+  const handleStartFinalize = () => {
+    setIsFinalizing(true);
+    setIsEditing(false);
     toast({
-      title: "Export coming soon",
-      description: "Calendar export will be available soon."
+      title: "Select a time slot",
+      description: "Click on a time slot in the grid to choose the final date and time."
     });
+  };
+
+  const handleCancelFinalize = () => {
+    setIsFinalizing(false);
+    setPrefillSlot(null);
   };
 
   if (isLoading || !event) {
@@ -571,10 +584,6 @@ const EventView = () => {
                 <Button variant="outline" size="sm" onClick={copyEventLink}>
                   <Share2 className="w-4 h-4 mr-2" />
                   Share
-                </Button>
-                <Button variant="outline" size="sm" onClick={exportToCalendar}>
-                  <Download className="w-4 h-4 mr-2" />
-                  Export
                 </Button>
               </div>
               {!event.isFinalized && (
@@ -704,12 +713,25 @@ const EventView = () => {
                   )}
                 </CardHeader>
                 <CardContent>
+                  {isFinalizing && (
+                    <div className="bg-primary/10 border border-primary/30 rounded-md p-3 mb-4 flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-primary">
+                        <CalendarCheck className="w-4 h-4" />
+                        <span className="text-sm font-medium">Click a time slot to select the final event time</span>
+                      </div>
+                      <Button variant="ghost" size="sm" onClick={handleCancelFinalize}>
+                        Cancel
+                      </Button>
+                    </div>
+                  )}
                   <AvailabilityGrid
                     event={event}
                     responses={responses}
                     userResponse={userResponse}
                     isEditing={isEditing}
+                    isFinalizing={isFinalizing}
                     onAvailabilityChange={handleAvailabilityChange}
+                    onSlotClickForFinalize={handleSlotClickForFinalize}
                   />
                   {isEditing && (
                     <div className="flex flex-wrap gap-2 mt-4">
@@ -718,9 +740,9 @@ const EventView = () => {
                       </Button>
                       <Button 
                         variant="secondary"
-                        onClick={() => {
-                          handleSaveResponse();
-                          setShowFinalizeDialog(true);
+                        onClick={async () => {
+                          await handleSaveResponse();
+                          handleStartFinalize();
                         }}
                       >
                         <CalendarCheck className="w-4 h-4 mr-2" />
@@ -749,8 +771,15 @@ const EventView = () => {
       {/* Finalize Event Dialog */}
       <FinalizeEventDialog
         open={showFinalizeDialog}
-        onOpenChange={setShowFinalizeDialog}
+        onOpenChange={(open) => {
+          setShowFinalizeDialog(open);
+          if (!open) {
+            setIsFinalizing(false);
+            setPrefillSlot(null);
+          }
+        }}
         event={event}
+        prefillSlot={prefillSlot}
         onFinalize={handleFinalizeEvent}
       />
     </div>

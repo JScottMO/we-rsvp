@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -31,6 +31,7 @@ interface FinalizeEventDialogProps {
     latestTime: string;
     timeIncrement: number;
   };
+  prefillSlot?: { date: string; time: string } | null;
   onFinalize: (date: string, startTime: string, endTime: string) => Promise<void>;
 }
 
@@ -38,13 +39,28 @@ export const FinalizeEventDialog = ({
   open,
   onOpenChange,
   event,
+  prefillSlot,
   onFinalize,
 }: FinalizeEventDialogProps) => {
-  const [selectedDate, setSelectedDate] = useState<string>("");
-  const [selectedStartTime, setSelectedStartTime] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<string>(prefillSlot?.date || "");
+  const [selectedStartTime, setSelectedStartTime] = useState<string>(prefillSlot?.time || "");
   const [selectedEndTime, setSelectedEndTime] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState<"select" | "confirm">("select");
+
+  // Update state when prefillSlot changes
+  React.useEffect(() => {
+    if (prefillSlot) {
+      setSelectedDate(prefillSlot.date);
+      setSelectedStartTime(prefillSlot.time);
+      // Auto-set end time to next slot
+      const slots = generateTimeSlots();
+      const startIndex = slots.indexOf(prefillSlot.time);
+      if (startIndex !== -1 && startIndex < slots.length - 1) {
+        setSelectedEndTime(slots[startIndex + 1]);
+      }
+    }
+  }, [prefillSlot]);
 
   // Generate time slots
   const generateTimeSlots = () => {
