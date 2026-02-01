@@ -6,12 +6,14 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { Calendar } from "@/components/ui/calendar";
 import { CalendarDays, ArrowLeft, Plus, X, Lock } from "lucide-react";
 import { format, addDays } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { generateEncryptionKey, encryptText } from "@/lib/encryption";
+import { AdvancedTimeGrid } from "@/components/AdvancedTimeGrid";
 
 // Input validation constants
 const MAX_TITLE_LENGTH = 200;
@@ -33,6 +35,8 @@ const CreateEvent = () => {
   });
 
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
+  const [advancedMode, setAdvancedMode] = useState(false);
+  const [advancedTimeSlots, setAdvancedTimeSlots] = useState<Record<string, boolean>>({});
   const [showCalendar, setShowCalendar] = useState(false);
   const [calendarOpened, setCalendarOpened] = useState(false);
 
@@ -323,34 +327,26 @@ const CreateEvent = () => {
           {/* Time Settings */}
           <Card>
             <CardHeader>
-              <CardTitle>Time settings</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle>Time settings</CardTitle>
+                <div className="flex items-center gap-2">
+                  <span className={`text-sm ${!advancedMode ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>Basic</span>
+                  <Switch
+                    checked={advancedMode}
+                    onCheckedChange={setAdvancedMode}
+                  />
+                  <span className={`text-sm ${advancedMode ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>Advanced</span>
+                </div>
+              </div>
               <p className="text-sm text-muted-foreground mt-1">
-                Define the time window participants can choose from. The grid will show slots between earliest and latest times.
-                <span className="block mt-1 text-xs italic">Example: 9 AM to 5 PM with 30-minute slots creates 16 time options per day.</span>
+                {advancedMode 
+                  ? "Select specific time slots for each date. Only selected slots will be available for participants."
+                  : "Define the time window participants can choose from. The grid will show slots between earliest and latest times."
+                }
               </p>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="earliest">Earliest time</Label>
-                  <Input
-                    id="earliest"
-                    type="time"
-                    value={formData.earliestTime}
-                    onChange={(e) => setFormData(prev => ({ ...prev, earliestTime: e.target.value }))}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="latest">Latest time</Label>
-                  <Input
-                    id="latest"
-                    type="time"
-                    value={formData.latestTime}
-                    onChange={(e) => setFormData(prev => ({ ...prev, latestTime: e.target.value }))}
-                  />
-                </div>
-              </div>
-              
+              {/* Common settings for both modes */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="increment">Time increment</Label>
@@ -382,6 +378,47 @@ const CreateEvent = () => {
                   </Select>
                 </div>
               </div>
+
+              {/* Basic mode: earliest/latest time */}
+              {!advancedMode && (
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="earliest">Earliest time</Label>
+                    <Input
+                      id="earliest"
+                      type="time"
+                      value={formData.earliestTime}
+                      onChange={(e) => setFormData(prev => ({ ...prev, earliestTime: e.target.value }))}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="latest">Latest time</Label>
+                    <Input
+                      id="latest"
+                      type="time"
+                      value={formData.latestTime}
+                      onChange={(e) => setFormData(prev => ({ ...prev, latestTime: e.target.value }))}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Advanced mode: time grid */}
+              {advancedMode && (
+                <AdvancedTimeGrid
+                  selectedDates={selectedDates}
+                  earliestTime={formData.earliestTime}
+                  latestTime={formData.latestTime}
+                  timeIncrement={parseInt(formData.timeIncrement)}
+                  selectedTimeSlots={advancedTimeSlots}
+                  onTimeSlotChange={(slot, selected) => {
+                    setAdvancedTimeSlots(prev => ({
+                      ...prev,
+                      [slot]: selected
+                    }));
+                  }}
+                />
+              )}
             </CardContent>
           </Card>
 
