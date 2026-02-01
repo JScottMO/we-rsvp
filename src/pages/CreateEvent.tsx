@@ -340,8 +340,8 @@ const CreateEvent = () => {
               </div>
               <p className="text-sm text-muted-foreground mt-1">
                 {advancedMode 
-                  ? "Select specific time slots for each date. Only selected slots will be available for participants."
-                  : "Define the time window participants can choose from. The grid will show slots between earliest and latest times."
+                  ? "Select specific time slots for each date. Only selected slots will be available for participants. Use this when different days have different available times."
+                  : "Define a simple time window (e.g., 9am–5pm) that applies to all dates. Best for events where any time within the window works."
                 }
               </p>
             </CardHeader>
@@ -360,6 +360,10 @@ const CreateEvent = () => {
                       <SelectItem value="15">15 minutes</SelectItem>
                       <SelectItem value="30">30 minutes</SelectItem>
                       <SelectItem value="60">1 hour</SelectItem>
+                      <SelectItem value="90">1.5 hours</SelectItem>
+                      <SelectItem value="120">2 hours</SelectItem>
+                      <SelectItem value="150">2.5 hours</SelectItem>
+                      <SelectItem value="180">3 hours</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
