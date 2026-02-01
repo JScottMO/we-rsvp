@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Share2, Users, Download, CalendarDays, Clock, Lock, AlertTriangle, CalendarCheck } from "lucide-react";
+import { Share2, Users, CalendarDays, Clock, Lock, AlertTriangle, CalendarCheck } from "lucide-react";
 import { AvailabilityGrid } from "@/components/AvailabilityGrid";
 import { ParticipantList } from "@/components/ParticipantList";
 import { FinalizeEventDialog } from "@/components/FinalizeEventDialog";
@@ -481,13 +481,6 @@ const EventView = () => {
     }
   };
 
-  const exportToCalendar = () => {
-    // TODO: Generate .ics file
-    toast({
-      title: "Export coming soon",
-      description: "Calendar export will be available soon."
-    });
-  };
 
   if (isLoading || !event) {
     return (
@@ -567,16 +560,10 @@ const EventView = () => {
               </div>
             </div>
             <div className="flex flex-col items-end gap-2">
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={copyEventLink}>
-                  <Share2 className="w-4 h-4 mr-2" />
-                  Share
-                </Button>
-                <Button variant="outline" size="sm" onClick={exportToCalendar}>
-                  <Download className="w-4 h-4 mr-2" />
-                  Export
-                </Button>
-              </div>
+              <Button variant="outline" size="sm" onClick={copyEventLink}>
+                <Share2 className="w-4 h-4 mr-2" />
+                Share
+              </Button>
               {!event.isFinalized && (
                 <p className="text-xs text-muted-foreground">
                   Share this link to find the best time!
