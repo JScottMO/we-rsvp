@@ -123,10 +123,10 @@ export function generateMailtoLink(
   
   bodyLines.push(
     '',
-    'Please add this event to your calendar using the attached .ics file or by creating a new event.',
+    'Please add this event to your calendar by creating a new event or downloading the .ics file from the event page.',
     '',
     '---',
-    'Scheduled with we.rsvp'
+    'Scheduled with we.rsvp - https://we-rsvp.lovable.app'
   );
   
   const body = encodeURIComponent(bodyLines.join('\n'));
