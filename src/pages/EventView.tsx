@@ -705,13 +705,12 @@ const EventView = () => {
                       </Button>
                       <Button 
                         variant="secondary"
-                        onClick={async () => {
-                          await handleSaveResponse();
+                        onClick={() => {
                           setShowFinalizeDialog(true);
                         }}
                       >
                         <CalendarCheck className="w-4 h-4 mr-2" />
-                        Save & finalize event
+                        Finalize event
                       </Button>
                       <Button 
                         variant="outline" 
