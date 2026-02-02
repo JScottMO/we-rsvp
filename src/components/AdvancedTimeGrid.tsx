@@ -1,4 +1,5 @@
 import { format, addMinutes } from "date-fns";
+import { useState, useCallback, useRef, useEffect } from "react";
 
 interface Props {
   selectedDates: Date[];
@@ -17,6 +18,42 @@ export const AdvancedTimeGrid = ({
   selectedTimeSlots,
   onTimeSlotChange,
 }: Props) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragMode, setDragMode] = useState<boolean | null>(null); // true = selecting, false = deselecting
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  // Handle mouse up anywhere to end drag
+  useEffect(() => {
+    const handleMouseUp = () => {
+      setIsDragging(false);
+      setDragMode(null);
+    };
+
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => window.removeEventListener('mouseup', handleMouseUp);
+  }, []);
+
+  const handleMouseDown = useCallback((date: Date, time: string) => {
+    const dateStr = format(date, 'yyyy-MM-dd');
+    const key = `${dateStr}T${time}`;
+    const newState = !selectedTimeSlots[key];
+    
+    setIsDragging(true);
+    setDragMode(newState);
+    onTimeSlotChange(key, newState);
+  }, [selectedTimeSlots, onTimeSlotChange]);
+
+  const handleMouseEnter = useCallback((date: Date, time: string) => {
+    if (!isDragging || dragMode === null) return;
+    
+    const dateStr = format(date, 'yyyy-MM-dd');
+    const key = `${dateStr}T${time}`;
+    
+    // Only change if different from drag mode
+    if (selectedTimeSlots[key] !== dragMode) {
+      onTimeSlotChange(key, dragMode);
+    }
+  }, [isDragging, dragMode, selectedTimeSlots, onTimeSlotChange]);
   // Generate time slots
   const generateTimeSlots = () => {
     const slots: string[] = [];
@@ -42,17 +79,11 @@ export const AdvancedTimeGrid = ({
   const timeSlots = generateTimeSlots();
   const sortedDates = [...selectedDates].sort((a, b) => a.getTime() - b.getTime());
 
-  const isSelected = (date: Date, time: string) => {
+  const isSelected = useCallback((date: Date, time: string) => {
     const dateStr = format(date, 'yyyy-MM-dd');
     const key = `${dateStr}T${time}`;
     return selectedTimeSlots[key] || false;
-  };
-
-  const handleClick = (date: Date, time: string) => {
-    const dateStr = format(date, 'yyyy-MM-dd');
-    const key = `${dateStr}T${time}`;
-    onTimeSlotChange(key, !selectedTimeSlots[key]);
-  };
+  }, [selectedTimeSlots]);
 
   if (selectedDates.length === 0) {
     return (
@@ -65,11 +96,12 @@ export const AdvancedTimeGrid = ({
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">
-        Click time slots to toggle availability options for each date. Selected slots will be available for participants to choose from.
+        Click and drag across time slots to quickly select or deselect availability options. Selected slots will be available for participants to choose from.
       </p>
       
       <div className="overflow-x-auto">
         <div 
+          ref={gridRef}
           className="grid gap-1 min-w-max select-none"
           style={{ 
             gridTemplateColumns: `80px repeat(${sortedDates.length}, minmax(100px, 1fr))` 
@@ -102,12 +134,16 @@ export const AdvancedTimeGrid = ({
                   <div
                     key={`${format(date, 'yyyy-MM-dd')}-${time}`}
                     className={`
-                      h-8 border border-border rounded cursor-pointer transition-all
+                      h-8 border border-border rounded cursor-pointer transition-colors
                       hover:bg-accent
                       ${selected ? 'bg-primary/20 ring-2 ring-primary ring-inset' : 'bg-muted/30'}
                     `}
-                    onClick={() => handleClick(date, time)}
-                    title={selected ? 'Click to remove' : 'Click to add'}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      handleMouseDown(date, time);
+                    }}
+                    onMouseEnter={() => handleMouseEnter(date, time)}
+                    title={selected ? 'Click or drag to remove' : 'Click or drag to add'}
                   />
                 );
               })}
