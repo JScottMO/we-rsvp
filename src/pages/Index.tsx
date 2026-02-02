@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarDays, Clock, Users, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import profCLogo from "@/assets/prof-c-logo.png";
+import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
 
 const Index = () => {
   const [eventTitle, setEventTitle] = useState("");
@@ -108,22 +109,33 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Prof C Attribution */}
-          <a 
-            href="https://christiansonjs.com/links/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="bg-muted rounded-lg p-6 flex items-center justify-center gap-3 hover:bg-muted/80 transition-colors"
-          >
-            <img 
-              src={profCLogo} 
-              alt="Prof C Logo" 
-              className="w-12 h-12"
-            />
-            <span className="text-sm text-muted-foreground">
-              Courtesy of Prof C
-            </span>
-          </a>
+          {/* Attribution */}
+          <div className="flex items-center justify-center gap-6 bg-muted rounded-lg p-4 w-fit mx-auto">
+            <a 
+              href="https://christiansonjs.com/links/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:opacity-80 transition-opacity"
+            >
+              <img 
+                src={profCLogo} 
+                alt="Prof C Logo" 
+                className="w-12 h-12"
+              />
+            </a>
+            <a 
+              href="https://buymeacoffee.com/profc" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:opacity-80 transition-opacity"
+            >
+              <img 
+                src={buyMeCoffeeLogo} 
+                alt="Buy me a coffee" 
+                className="h-10"
+              />
+            </a>
+          </div>
         </div>
       </main>
     </div>
