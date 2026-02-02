@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarDays, Clock, Users, Shield } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import profCLogo from "@/assets/prof-c-logo.png";
 import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
 
@@ -104,7 +104,10 @@ const Index = () => {
               </div>
               <h3 className="text-lg font-semibold mb-2">Privacy first</h3>
               <p className="text-muted-foreground">
-                We don't track you. Your data stays minimal and anonymous.
+                We don't track you. Your data stays minimal and anonymous.{" "}
+                <Link to="/privacy" className="text-primary hover:underline">
+                  Read more
+                </Link>
               </p>
             </div>
           </div>
