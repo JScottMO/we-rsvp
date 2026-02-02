@@ -31,8 +31,11 @@ const Index = () => {
               </div>
               <h1 className="text-2xl font-bold text-foreground">we.rsvp</h1>
             </div>
-            <div className="text-sm text-muted-foreground">
-              Privacy-first group scheduling
+            <div className="text-sm text-muted-foreground flex flex-col items-end">
+              <span>Privacy-first group scheduling</span>
+              <Link to="/compare" className="text-primary hover:underline text-xs">
+                See how we compare →
+              </Link>
             </div>
           </div>
         </div>
