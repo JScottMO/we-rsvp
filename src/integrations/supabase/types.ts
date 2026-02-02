@@ -139,7 +139,7 @@ export type Database = {
       }
     }
     Functions: {
-      [_ in never]: never
+      cleanup_old_finalized_events: { Args: never; Returns: number }
     }
     Enums: {
       [_ in never]: never
