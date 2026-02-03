@@ -121,6 +121,11 @@ const CreateEvent = () => {
         ? await encryptText(formData.description, encryptionKey)
         : null;
 
+      // Prepare advanced time slots if in advanced mode with selections
+      const advancedSlots = advancedMode && Object.keys(advancedTimeSlots).length > 0
+        ? advancedTimeSlots
+        : null;
+
       const { data, error } = await supabase
         .from('events')
         .insert({
@@ -130,7 +135,8 @@ const CreateEvent = () => {
           earliest_time: formData.earliestTime,
           latest_time: formData.latestTime,
           time_increment: parseInt(formData.timeIncrement),
-          week_start_day: parseInt(formData.weekStartDay)
+          week_start_day: parseInt(formData.weekStartDay),
+          advanced_time_slots: advancedSlots
         })
         .select()
         .single();
