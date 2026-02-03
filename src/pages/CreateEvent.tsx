@@ -389,29 +389,27 @@ const CreateEvent = () => {
                 </div>
               </div>
 
-              {/* Basic mode: earliest/latest time */}
-              {!advancedMode && (
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="earliest">Earliest time</Label>
-                    <Input
-                      id="earliest"
-                      type="time"
-                      value={formData.earliestTime}
-                      onChange={(e) => setFormData(prev => ({ ...prev, earliestTime: e.target.value }))}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="latest">Latest time</Label>
-                    <Input
-                      id="latest"
-                      type="time"
-                      value={formData.latestTime}
-                      onChange={(e) => setFormData(prev => ({ ...prev, latestTime: e.target.value }))}
-                    />
-                  </div>
+              {/* Earliest/latest time - shown in both modes */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="earliest">Earliest time</Label>
+                  <Input
+                    id="earliest"
+                    type="time"
+                    value={formData.earliestTime}
+                    onChange={(e) => setFormData(prev => ({ ...prev, earliestTime: e.target.value }))}
+                  />
                 </div>
-              )}
+                <div>
+                  <Label htmlFor="latest">Latest time</Label>
+                  <Input
+                    id="latest"
+                    type="time"
+                    value={formData.latestTime}
+                    onChange={(e) => setFormData(prev => ({ ...prev, latestTime: e.target.value }))}
+                  />
+                </div>
+              </div>
 
               {/* Advanced mode: time grid */}
               {advancedMode && (
