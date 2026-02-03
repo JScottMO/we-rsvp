@@ -6,6 +6,7 @@ interface Event {
   earliestTime: string;
   latestTime: string;
   timeIncrement: number;
+  advancedTimeSlots?: Record<string, boolean>;
 }
 
 interface Response {
@@ -31,6 +32,17 @@ export const AvailabilityGrid = ({
   const [dragMode, setDragMode] = useState<'select' | 'deselect' | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStarted, setDragStarted] = useState(false);
+
+  // Check if a time slot is allowed based on advanced time slots
+  const isSlotAllowed = (date: string, time: string): boolean => {
+    // If no advanced time slots configured, all slots within range are allowed
+    if (!event.advancedTimeSlots || Object.keys(event.advancedTimeSlots).length === 0) {
+      return true;
+    }
+    // Check if this specific slot is marked as available in advanced config
+    const slotKey = `${date}T${time}`;
+    return event.advancedTimeSlots[slotKey] === true;
+  };
 
   // Generate time slots
   const generateTimeSlots = () => {
@@ -160,6 +172,19 @@ export const AvailabilityGrid = ({
             
             {/* Time slot cells */}
             {event.dateOptions.map((date) => {
+              const allowed = isSlotAllowed(date, time);
+              
+              // Skip rendering slots that aren't allowed by advanced config
+              if (!allowed) {
+                return (
+                  <div
+                    key={`${date}-${time}`}
+                    className="h-8 bg-muted/20 border border-dashed border-grid-border/50 rounded"
+                    title="Not available for this event"
+                  />
+                );
+              }
+              
               const consensusLevel = getConsensusLevel(date, time);
               const userAvailable = isUserAvailable(date, time);
               const canEdit = isEditing;

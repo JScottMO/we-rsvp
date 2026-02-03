@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       events: {
         Row: {
+          advanced_time_slots: Json | null
           created_at: string
           date_options: string[]
           description: string | null
@@ -31,6 +32,7 @@ export type Database = {
           week_start_day: number
         }
         Insert: {
+          advanced_time_slots?: Json | null
           created_at?: string
           date_options: string[]
           description?: string | null
@@ -46,6 +48,7 @@ export type Database = {
           week_start_day?: number
         }
         Update: {
+          advanced_time_slots?: Json | null
           created_at?: string
           date_options?: string[]
           description?: string | null
