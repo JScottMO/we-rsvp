@@ -8,6 +8,7 @@ import CreateEvent from "./pages/CreateEvent";
 import EventView from "./pages/EventView";
 import Privacy from "./pages/Privacy";
 import Compare from "./pages/Compare";
+import HowToUse from "./pages/HowToUse";
 import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/event/:eventId" element={<EventView />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/compare" element={<Compare />} />
+          <Route path="/how-to-use" element={<HowToUse />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
