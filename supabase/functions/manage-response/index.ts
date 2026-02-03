@@ -51,7 +51,7 @@ function checkRateLimit(ip: string): { allowed: boolean; retryAfter?: number } {
 }
 
 interface RequestBody {
-  action: 'create' | 'update' | 'verify';
+  action: 'create' | 'update' | 'verify' | 'delete';
   eventId: string;
   participantName: string;
   password?: string;
@@ -270,8 +270,53 @@ Deno.serve(async (req) => {
       );
     }
 
+    if (action === 'delete') {
+      if (!existingResponse) {
+        return new Response(
+          JSON.stringify({ error: 'Response not found.' }),
+          { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      // Verify password if set
+      if (existingResponse.participant_password_hash) {
+        if (!password) {
+          return new Response(
+            JSON.stringify({ error: 'Password required to delete this response', requiresPassword: true }),
+            { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+        
+        const passwordValid = await bcrypt.compare(password, existingResponse.participant_password_hash);
+        if (!passwordValid) {
+          return new Response(
+            JSON.stringify({ error: 'Invalid password' }),
+            { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+      }
+
+      const { error } = await supabase
+        .from('responses')
+        .delete()
+        .eq('id', existingResponse.id);
+
+      if (error) {
+        console.error('Delete error:', error);
+        return new Response(
+          JSON.stringify({ error: 'Failed to delete response' }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      return new Response(
+        JSON.stringify({ success: true, deleted: true }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     return new Response(
-      JSON.stringify({ error: 'Invalid action. Use create, update, or verify.' }),
+      JSON.stringify({ error: 'Invalid action. Use create, update, verify, or delete.' }),
       { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 

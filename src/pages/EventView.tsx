@@ -437,6 +437,100 @@ const EventView = () => {
     }
   };
 
+  const handleCancelEditing = async () => {
+    if (!userResponse || !eventId) {
+      setIsEditing(false);
+      return;
+    }
+
+    // If this is a new participant (empty id means not yet saved), just reset local state
+    if (!userResponse.id) {
+      // Remove from local responses list
+      setResponses(prev => prev.filter(r => r.participantName !== userResponse.participantName));
+      setUserResponse(null);
+      setIsEditing(false);
+      setParticipantName('');
+      setParticipantPassword('');
+      return;
+    }
+
+    // If existing participant, delete their response from the database
+    try {
+      // Find the encrypted name if needed
+      const { data: existingResponses } = await supabase
+        .from('responses_public')
+        .select('id, participant_name')
+        .eq('event_id', eventId);
+
+      let nameToDelete = userResponse.participantName;
+      
+      if (existingResponses) {
+        for (const r of existingResponses) {
+          if (encryptionKey && isEncrypted(r.participant_name ?? '')) {
+            try {
+              const decrypted = await decryptText(r.participant_name ?? '', encryptionKey);
+              if (decrypted.toLowerCase() === userResponse.participantName.toLowerCase()) {
+                nameToDelete = r.participant_name ?? userResponse.participantName;
+                break;
+              }
+            } catch {
+              // Skip if can't decrypt
+            }
+          } else if ((r.participant_name ?? '').toLowerCase() === userResponse.participantName.toLowerCase()) {
+            nameToDelete = r.participant_name ?? userResponse.participantName;
+            break;
+          }
+        }
+      }
+
+      const { data: deleteResult, error: deleteError } = await supabase.functions.invoke('manage-response', {
+        body: {
+          action: 'delete',
+          eventId,
+          participantName: nameToDelete,
+          password: participantPassword || undefined
+        }
+      });
+
+      if (deleteError) {
+        console.error('Delete error:', deleteError);
+        throw deleteError;
+      }
+
+      if (deleteResult?.requiresPassword) {
+        toast({
+          title: "Password required",
+          description: "This response is password protected. Enter your password to remove it.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (deleteResult?.error) {
+        throw new Error(deleteResult.error);
+      }
+
+      // Remove from local state
+      setResponses(prev => prev.filter(r => r.id !== userResponse.id));
+      setUserResponse(null);
+      setIsEditing(false);
+      setParticipantName('');
+      setParticipantPassword('');
+
+      toast({
+        title: "Response removed",
+        description: "Your availability has been cleared from this event."
+      });
+    } catch (err) {
+      console.error('handleCancelEditing error:', err);
+      toast({
+        title: "Error",
+        description: "Failed to remove your response. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const copyEventLink = () => {
     navigator.clipboard.writeText(window.location.href);
     toast({
@@ -716,7 +810,7 @@ const EventView = () => {
                       </Button>
                       <Button 
                         variant="outline" 
-                        onClick={() => setIsEditing(false)}
+                        onClick={handleCancelEditing}
                       >
                         Cancel
                       </Button>
