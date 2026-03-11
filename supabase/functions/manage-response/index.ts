@@ -58,6 +58,41 @@ interface RequestBody {
   availability?: Record<string, boolean>;
 }
 
+async function enqueueErrorNotification(
+  supabase: ReturnType<typeof createClient>,
+  source: string,
+  message: string,
+  context?: Record<string, unknown>
+) {
+  const notificationEmail = Deno.env.get('NOTIFICATION_EMAIL');
+  if (!notificationEmail) return;
+
+  const timestamp = new Date().toISOString();
+  const html = `
+    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <h2 style="color: #e11d48;">⚠️ Edge Function Error — we.rsvp</h2>
+      <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+        <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #e5e7eb;">Source</td><td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">${source}</td></tr>
+        <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #e5e7eb;">Time</td><td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">${timestamp}</td></tr>
+        <tr><td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #e5e7eb;">Message</td><td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">${message}</td></tr>
+        ${context ? `<tr><td style="padding: 8px; font-weight: bold;">Context</td><td style="padding: 8px;">${JSON.stringify(context)}</td></tr>` : ''}
+      </table>
+    </div>
+  `;
+
+  try {
+    await supabase.rpc('enqueue_email', {
+      payload: {
+        to: notificationEmail,
+        subject: `[we.rsvp Error] ${source}: ${message.substring(0, 80)}`,
+        html,
+      },
+    });
+  } catch (e) {
+    console.error('Failed to enqueue error notification:', e);
+  }
+}
+
 Deno.serve(async (req) => {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
@@ -209,6 +244,7 @@ Deno.serve(async (req) => {
 
       if (error) {
         console.error('Insert error:', error);
+        await enqueueErrorNotification(supabase, 'manage-response:create', error.message, { eventId, participantName });
         return new Response(
           JSON.stringify({ error: 'Failed to create response' }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -259,6 +295,7 @@ Deno.serve(async (req) => {
 
       if (error) {
         console.error('Update error:', error);
+        await enqueueErrorNotification(supabase, 'manage-response:update', error.message, { eventId, participantName });
         return new Response(
           JSON.stringify({ error: 'Failed to update response' }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -304,6 +341,7 @@ Deno.serve(async (req) => {
 
       if (error) {
         console.error('Delete error:', error);
+        await enqueueErrorNotification(supabase, 'manage-response:delete', error.message, { eventId, participantName });
         return new Response(
           JSON.stringify({ error: 'Failed to delete response' }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
