@@ -195,7 +195,7 @@ export const AvailabilityGrid = ({
                   className={`
                     h-8 border border-grid-border rounded cursor-pointer transition-all
                     ${canEdit ? 'hover:bg-grid-hover' : ''}
-                    ${userAvailable && canEdit ? 'ring-2 ring-primary ring-inset' : ''}
+                    ${userAvailable && canEdit ? 'ring-2 ring-foreground ring-inset' : ''}
                     ${getConsensusColor(consensusLevel)}
                   `}
                   onMouseDown={(e) => handleMouseDown(date, time, e)}
