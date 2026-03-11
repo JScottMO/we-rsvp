@@ -803,6 +803,24 @@ const EventView = () => {
             </Card>
           )}
 
+          {/* Instruction boxes */}
+          {!event.isFinalized && (
+            <div className="grid md:grid-cols-2 gap-4 mb-6">
+              <div className="p-4 bg-accent rounded-lg border border-border">
+                <p className="text-sm font-medium text-accent-foreground mb-1">📝 Mark your availability</p>
+                <p className="text-xs text-muted-foreground">
+                  Click <strong>"Join event"</strong> below, then click or drag across time slots to mark when you're free. Your selections are outlined in black. Green shading shows when others are available. Don't forget to <strong>Save response</strong> when you're done!
+                </p>
+              </div>
+              <div className="p-4 bg-accent rounded-lg border border-border">
+                <p className="text-sm font-medium text-accent-foreground mb-1">✅ Finalize the event</p>
+                <p className="text-xs text-muted-foreground">
+                  Once everyone has responded, <strong>join the event</strong> to access the <strong>"Finalize event"</strong> button. Pick the best date and time, then lock it in — participants can download the event or share it via email.
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="grid lg:grid-cols-4 gap-8">
             {/* Availability Grid */}
             <div className="lg:col-span-3">
