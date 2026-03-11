@@ -204,7 +204,8 @@ export const AvailabilityGrid = ({
                   key={`${date}-${time}`}
                   className={`
                     h-8 border border-grid-border rounded cursor-pointer transition-all
-                    ${canEdit ? 'hover:bg-grid-hover' : ''}
+                    ${canEdit || isFinalizing ? 'hover:bg-grid-hover' : ''}
+                    ${isFinalizing ? 'hover:ring-2 hover:ring-primary hover:ring-inset' : ''}
                     ${userAvailable && canEdit ? 'ring-2 ring-foreground ring-inset' : ''}
                     ${getConsensusColor(consensusLevel)}
                   `}
