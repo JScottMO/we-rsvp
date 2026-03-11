@@ -306,6 +306,7 @@ Deno.serve(async (req) => {
 
       if (error) {
         console.error('Delete error:', error);
+        await enqueueErrorNotification(supabase, 'manage-response:delete', error.message, { eventId, participantName });
         return new Response(
           JSON.stringify({ error: 'Failed to delete response' }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
