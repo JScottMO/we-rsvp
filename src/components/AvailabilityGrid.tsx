@@ -19,7 +19,9 @@ interface Props {
   responses: Response[];
   userResponse: Response | null;
   isEditing: boolean;
+  isFinalizing?: boolean;
   onAvailabilityChange: (timeSlot: string, available: boolean) => void;
+  onFinalizeSlotClick?: (date: string, time: string) => void;
 }
 
 export const AvailabilityGrid = ({ 
