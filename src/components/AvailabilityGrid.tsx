@@ -231,7 +231,7 @@ export const AvailabilityGrid = ({
         </div>
         {isEditing && (
           <div className="flex items-center gap-2 ml-4">
-            <div className="w-4 h-4 bg-primary/20 border-2 border-primary rounded"></div>
+            <div className="w-4 h-4 bg-primary/20 border-2 border-foreground rounded"></div>
             <span className="text-muted-foreground">Your availability</span>
           </div>
         )}
