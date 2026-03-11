@@ -621,14 +621,11 @@ const EventView = () => {
     if (!eventId) return;
     
     try {
-      const { error } = await supabase
-        .from('events')
-        .update({
-          is_finalized: true,
-          finalized_date: date,
-          finalized_time: `${startTime}-${endTime}`
-        })
-        .eq('id', eventId);
+      const { error } = await supabase.rpc('finalize_event', {
+        p_event_id: eventId,
+        p_finalized_date: date,
+        p_finalized_time: `${startTime}-${endTime}`
+      });
 
       if (error) throw error;
 
