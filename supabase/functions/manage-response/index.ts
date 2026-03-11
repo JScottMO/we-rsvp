@@ -156,7 +156,7 @@ Deno.serve(async (req) => {
             );
           }
           
-          const passwordValid = await bcrypt.compare(password, existingResponse.participant_password_hash);
+          const passwordValid = bcrypt.compareSync(password, existingResponse.participant_password_hash);
           if (!passwordValid) {
             return new Response(
               JSON.stringify({ error: 'Invalid password' }),
@@ -192,7 +192,8 @@ Deno.serve(async (req) => {
             { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
         }
-        passwordHash = await bcrypt.hash(password);
+        const salt = await bcrypt.genSalt(10);
+        passwordHash = bcrypt.hashSync(password, salt);
       }
 
       const { data, error } = await supabase
@@ -237,7 +238,7 @@ Deno.serve(async (req) => {
           );
         }
         
-        const passwordValid = await bcrypt.compare(password, existingResponse.participant_password_hash);
+        const passwordValid = bcrypt.compareSync(password, existingResponse.participant_password_hash);
         if (!passwordValid) {
           return new Response(
             JSON.stringify({ error: 'Invalid password' }),
@@ -287,7 +288,7 @@ Deno.serve(async (req) => {
           );
         }
         
-        const passwordValid = await bcrypt.compare(password, existingResponse.participant_password_hash);
+        const passwordValid = bcrypt.compareSync(password, existingResponse.participant_password_hash);
         if (!passwordValid) {
           return new Response(
             JSON.stringify({ error: 'Invalid password' }),
