@@ -156,7 +156,7 @@ Deno.serve(async (req) => {
             );
           }
           
-          const passwordValid = await bcrypt.compare(password, existingResponse.participant_password_hash);
+          const passwordValid = bcrypt.compareSync(password, existingResponse.participant_password_hash);
           if (!passwordValid) {
             return new Response(
               JSON.stringify({ error: 'Invalid password' }),
