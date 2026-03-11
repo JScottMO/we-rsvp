@@ -887,7 +887,12 @@ const EventView = () => {
                     responses={responses}
                     userResponse={userResponse}
                     isEditing={isEditing}
+                    isFinalizing={isFinalizing}
                     onAvailabilityChange={handleAvailabilityChange}
+                    onFinalizeSlotClick={(date, time) => {
+                      setFinalizeSelection({ date, time });
+                      setShowFinalizeDialog(true);
+                    }}
                   />
                   {isEditing && (
                     <div className="flex flex-wrap gap-2 mt-4">
