@@ -941,20 +941,30 @@ const EventView = () => {
       </main>
 
       {/* Finalize Event Dialog */}
-      <FinalizeEventDialog
-        open={showFinalizeDialog}
-        onOpenChange={setShowFinalizeDialog}
-        event={{
-          id: event.id,
-          title: event.title,
-          description: event.description,
-          dateOptions: event.dateOptions,
-          earliestTime: event.earliestTime,
-          latestTime: event.latestTime,
-          timeIncrement: event.timeIncrement,
-        }}
-        onFinalize={handleFinalizeEvent}
-      />
+      {finalizeSelection && (
+        <FinalizeEventDialog
+          open={showFinalizeDialog}
+          onOpenChange={(open) => {
+            setShowFinalizeDialog(open);
+            if (!open) {
+              setFinalizeSelection(null);
+              setIsFinalizing(false);
+            }
+          }}
+          event={{
+            id: event.id,
+            title: event.title,
+            description: event.description,
+            dateOptions: event.dateOptions,
+            earliestTime: event.earliestTime,
+            latestTime: event.latestTime,
+            timeIncrement: event.timeIncrement,
+          }}
+          selectedDate={finalizeSelection.date}
+          selectedTime={finalizeSelection.time}
+          onFinalize={handleFinalizeEvent}
+        />
+      )}
     </div>
   );
 };
