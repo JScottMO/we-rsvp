@@ -59,6 +59,8 @@ const EventView = () => {
   const [participantPassword, setParticipantPassword] = useState("");
   const [showJoinDialog, setShowJoinDialog] = useState(false);
   const [showFinalizeDialog, setShowFinalizeDialog] = useState(false);
+  const [isFinalizing, setIsFinalizing] = useState(false);
+  const [finalizeSelection, setFinalizeSelection] = useState<{ date: string; time: string } | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [encryptionKey, setEncryptionKey] = useState<string | null>(() => getEncryptionKey());
   const [decryptionError, setDecryptionError] = useState(false);
