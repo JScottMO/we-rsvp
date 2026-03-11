@@ -195,7 +195,7 @@ export const AvailabilityGrid = ({
                   className={`
                     h-8 border border-grid-border rounded cursor-pointer transition-all
                     ${canEdit ? 'hover:bg-grid-hover' : ''}
-                    ${userAvailable && canEdit ? 'ring-2 ring-primary ring-inset' : ''}
+                    ${userAvailable && canEdit ? 'ring-2 ring-foreground ring-inset' : ''}
                     ${getConsensusColor(consensusLevel)}
                   `}
                   onMouseDown={(e) => handleMouseDown(date, time, e)}
@@ -231,16 +231,19 @@ export const AvailabilityGrid = ({
         </div>
         {isEditing && (
           <div className="flex items-center gap-2 ml-4">
-            <div className="w-4 h-4 bg-primary/20 border-2 border-primary rounded"></div>
+            <div className="w-4 h-4 bg-primary/20 border-2 border-foreground rounded"></div>
             <span className="text-muted-foreground">Your availability</span>
           </div>
         )}
       </div>
       
       {isEditing && (
-        <p className="text-xs text-muted-foreground mt-2">
-          Click and drag to mark your availability. Green shows when others are free.
-        </p>
+        <div className="mt-3 p-3 bg-accent rounded-md border border-border">
+          <p className="text-sm font-medium text-accent-foreground mb-1">📝 Mark your availability</p>
+          <p className="text-xs text-muted-foreground">
+            Click or drag across time slots to mark when you're free. Your selections are outlined in black. Green shading shows when others are available. Don't forget to <strong>Save response</strong> when you're done!
+          </p>
+        </div>
       )}
     </div>
   );
