@@ -2,3 +2,9 @@ project_id = "raxgcndwtqphoxoagthf"
 
 [functions.manage-response]
 verify_jwt = false
+
+[functions.report-error]
+verify_jwt = false
+
+[functions.send-transactional-email]
+verify_jwt = false
