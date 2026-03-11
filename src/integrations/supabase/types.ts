@@ -143,6 +143,18 @@ export type Database = {
     }
     Functions: {
       cleanup_old_finalized_events: { Args: never; Returns: number }
+      delete_email_message: { Args: { msg_id: number }; Returns: boolean }
+      dequeue_emails: {
+        Args: { batch_size?: number }
+        Returns: unknown[]
+        SetofOptions: {
+          from: "*"
+          to: "message_record"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      enqueue_email: { Args: { payload: Json }; Returns: number }
     }
     Enums: {
       [_ in never]: never
