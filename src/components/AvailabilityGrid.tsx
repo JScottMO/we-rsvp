@@ -136,6 +136,11 @@ export const AvailabilityGrid = ({
   };
 
   const handleClick = (date: string, time: string, event: React.MouseEvent) => {
+    if (isFinalizing) {
+      event.preventDefault();
+      onFinalizeSlotClick?.(date, time);
+      return;
+    }
     if (!isEditing || dragStarted) {
       event.preventDefault();
       return;
