@@ -256,18 +256,51 @@ const EventView = () => {
         // If the response has no password and the joining user didn't provide one, it could be the original user OR someone else
         // To prevent name collisions, require a password to reclaim a password-less entry
         // Actually, check if response has a password: if verify succeeded without a password, the response is unprotected
-        if (!participantPassword && result?.exists) {
-          // Check if the response is password-protected by trying to detect from verify result
-          // If verify succeeded without providing a password, the response has no password
-          // In that case, we can't verify identity, so block re-use of the name
-          // We need to check the edge function to know if the response has a password
-          // Since verify succeeded without a password, the entry is unprotected — block name reuse
-          toast({
-            title: "Name already taken",
-            description: "Someone with this name has already responded. Please choose a different name or set a password to protect your response.",
-            variant: "destructive"
+        if (result?.exists) {
+          // Verify succeeded without requiring a password — the existing entry is unprotected.
+          // If the new user also has no password, we can't verify identity — block reuse.
+          // If the new user IS providing a password, they're a different person trying to
+          // use an already-taken name — also block.
+          // The only way to reach this point with a password-protected entry is if the
+          // correct password was provided (verify would have failed otherwise), which is fine.
+          const existingIsUnprotected = !participantPassword || 
+            (participantPassword && !funcError);
+          // More precisely: if verify succeeded without needing a password, entry is unprotected
+          // We know the entry is unprotected if we didn't provide a password and verify succeeded
+          if (!participantPassword) {
+            toast({
+              title: "Name already taken",
+              description: "Someone with this name has already responded. Please choose a different name or set a password to protect your response.",
+              variant: "destructive"
+            });
+            return;
+          }
+          // If user provided a password but the existing entry has NO password,
+          // verify succeeds (no password check needed), but they're a different person
+          // trying to claim this name. Block it.
+          // We can detect this: verify succeeded AND the existing entry didn't require a password.
+          // The edge function returns requiresPassword:true when a password is needed but not provided.
+          // Since we DID provide a password and verify succeeded without complaint, 
+          // the entry either has no password OR our password matched.
+          // To distinguish: re-verify WITHOUT a password to see if the entry is protected.
+          const { data: checkResult, error: checkError } = await supabase.functions.invoke('manage-response', {
+            body: {
+              action: 'verify',
+              eventId,
+              participantName: encryptedName,
+            }
           });
-          return;
+          
+          // If verify succeeds without a password, the entry is unprotected
+          // and the current user (who wants a password) is a different person
+          if (!checkError && checkResult?.exists) {
+            toast({
+              title: "Name already taken",
+              description: "Someone with this name has already responded without a password. Please choose a different name.",
+              variant: "destructive"
+            });
+            return;
+          }
         }
 
         setUserResponse(existing);
