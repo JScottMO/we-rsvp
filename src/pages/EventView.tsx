@@ -368,16 +368,29 @@ const EventView = () => {
           });
           return;
         }
+        // Try to parse the error response for requiresPassword
+        try {
+          const errorBody = saveError?.context ? await saveError.context.json() : null;
+          if (errorBody?.requiresPassword) {
+            toast({
+              title: "Password required",
+              description: "This response is password protected. Please enter the correct password.",
+              variant: "destructive"
+            });
+            return;
+          }
+          if (errorBody?.error === 'Invalid password') {
+            toast({
+              title: "Invalid password",
+              description: "The password you entered is incorrect.",
+              variant: "destructive"
+            });
+            return;
+          }
+        } catch {
+          // Could not parse error body
+        }
         throw saveError;
-      }
-
-      if (saveResult?.requiresPassword) {
-        toast({
-          title: "Password required",
-          description: "This response is password protected. Please enter the correct password.",
-          variant: "destructive"
-        });
-        return;
       }
       
       if (saveResult?.error) {
