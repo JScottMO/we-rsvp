@@ -209,6 +209,7 @@ Deno.serve(async (req) => {
 
       if (error) {
         console.error('Insert error:', error);
+        await enqueueErrorNotification(supabase, 'manage-response:create', error.message, { eventId, participantName });
         return new Response(
           JSON.stringify({ error: 'Failed to create response' }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
