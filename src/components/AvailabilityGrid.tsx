@@ -98,6 +98,7 @@ export const AvailabilityGrid = ({
   };
 
   const handleMouseDown = (date: string, time: string, event: React.MouseEvent) => {
+    if (isFinalizing) return;
     if (!isEditing) return;
     
     event.preventDefault();
