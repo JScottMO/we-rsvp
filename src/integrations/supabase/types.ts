@@ -155,6 +155,14 @@ export type Database = {
         }
       }
       enqueue_email: { Args: { payload: Json }; Returns: number }
+      finalize_event: {
+        Args: {
+          p_event_id: string
+          p_finalized_date: string
+          p_finalized_time: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
