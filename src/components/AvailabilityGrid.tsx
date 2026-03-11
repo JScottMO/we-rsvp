@@ -19,7 +19,9 @@ interface Props {
   responses: Response[];
   userResponse: Response | null;
   isEditing: boolean;
+  isFinalizing?: boolean;
   onAvailabilityChange: (timeSlot: string, available: boolean) => void;
+  onFinalizeSlotClick?: (date: string, time: string) => void;
 }
 
 export const AvailabilityGrid = ({ 
@@ -27,7 +29,9 @@ export const AvailabilityGrid = ({
   responses, 
   userResponse, 
   isEditing, 
-  onAvailabilityChange 
+  isFinalizing = false,
+  onAvailabilityChange,
+  onFinalizeSlotClick,
 }: Props) => {
   const [dragMode, setDragMode] = useState<'select' | 'deselect' | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -94,6 +98,7 @@ export const AvailabilityGrid = ({
   };
 
   const handleMouseDown = (date: string, time: string, event: React.MouseEvent) => {
+    if (isFinalizing) return;
     if (!isEditing) return;
     
     event.preventDefault();
@@ -131,6 +136,11 @@ export const AvailabilityGrid = ({
   };
 
   const handleClick = (date: string, time: string, event: React.MouseEvent) => {
+    if (isFinalizing) {
+      event.preventDefault();
+      onFinalizeSlotClick?.(date, time);
+      return;
+    }
     if (!isEditing || dragStarted) {
       event.preventDefault();
       return;
@@ -194,7 +204,8 @@ export const AvailabilityGrid = ({
                   key={`${date}-${time}`}
                   className={`
                     h-8 border border-grid-border rounded cursor-pointer transition-all
-                    ${canEdit ? 'hover:bg-grid-hover' : ''}
+                    ${canEdit || isFinalizing ? 'hover:bg-grid-hover' : ''}
+                    ${isFinalizing ? 'hover:ring-2 hover:ring-primary hover:ring-inset' : ''}
                     ${userAvailable && canEdit ? 'ring-2 ring-foreground ring-inset' : ''}
                     ${getConsensusColor(consensusLevel)}
                   `}

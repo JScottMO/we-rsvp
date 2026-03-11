@@ -59,6 +59,8 @@ const EventView = () => {
   const [participantPassword, setParticipantPassword] = useState("");
   const [showJoinDialog, setShowJoinDialog] = useState(false);
   const [showFinalizeDialog, setShowFinalizeDialog] = useState(false);
+  const [isFinalizing, setIsFinalizing] = useState(false);
+  const [finalizeSelection, setFinalizeSelection] = useState<{ date: string; time: string } | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [encryptionKey, setEncryptionKey] = useState<string | null>(() => getEncryptionKey());
   const [decryptionError, setDecryptionError] = useState(false);
@@ -885,18 +887,21 @@ const EventView = () => {
                     responses={responses}
                     userResponse={userResponse}
                     isEditing={isEditing}
+                    isFinalizing={isFinalizing}
                     onAvailabilityChange={handleAvailabilityChange}
+                    onFinalizeSlotClick={(date, time) => {
+                      setFinalizeSelection({ date, time });
+                      setShowFinalizeDialog(true);
+                    }}
                   />
-                  {isEditing && (
+                  {isEditing && !isFinalizing && (
                     <div className="flex flex-wrap gap-2 mt-4">
                       <Button onClick={handleSaveResponse}>
                         Save response
                       </Button>
                       <Button 
                         variant="secondary"
-                        onClick={() => {
-                          setShowFinalizeDialog(true);
-                        }}
+                        onClick={() => setIsFinalizing(true)}
                       >
                         <CalendarCheck className="w-4 h-4 mr-2" />
                         Finalize event
@@ -906,6 +911,20 @@ const EventView = () => {
                         onClick={handleCancelEditing}
                       >
                         Cancel
+                      </Button>
+                    </div>
+                  )}
+                  {isFinalizing && (
+                    <div className="mt-4 p-3 bg-primary/10 border border-primary/30 rounded-md">
+                      <p className="text-sm font-medium text-primary mb-2">
+                        🎯 Click a time slot on the grid to select the final time
+                      </p>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => setIsFinalizing(false)}
+                      >
+                        Cancel finalization
                       </Button>
                     </div>
                   )}
@@ -922,20 +941,30 @@ const EventView = () => {
       </main>
 
       {/* Finalize Event Dialog */}
-      <FinalizeEventDialog
-        open={showFinalizeDialog}
-        onOpenChange={setShowFinalizeDialog}
-        event={{
-          id: event.id,
-          title: event.title,
-          description: event.description,
-          dateOptions: event.dateOptions,
-          earliestTime: event.earliestTime,
-          latestTime: event.latestTime,
-          timeIncrement: event.timeIncrement,
-        }}
-        onFinalize={handleFinalizeEvent}
-      />
+      {finalizeSelection && (
+        <FinalizeEventDialog
+          open={showFinalizeDialog}
+          onOpenChange={(open) => {
+            setShowFinalizeDialog(open);
+            if (!open) {
+              setFinalizeSelection(null);
+              setIsFinalizing(false);
+            }
+          }}
+          event={{
+            id: event.id,
+            title: event.title,
+            description: event.description,
+            dateOptions: event.dateOptions,
+            earliestTime: event.earliestTime,
+            latestTime: event.latestTime,
+            timeIncrement: event.timeIncrement,
+          }}
+          selectedDate={finalizeSelection.date}
+          selectedTime={finalizeSelection.time}
+          onFinalize={handleFinalizeEvent}
+        />
+      )}
     </div>
   );
 };
