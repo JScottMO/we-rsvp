@@ -223,12 +223,15 @@ const EventView = () => {
           try {
             const errorBody = funcError?.context ? await funcError.context.json() : null;
             if (errorBody?.requiresPassword) {
-              toast({
-                title: "Password required",
-                description: "This participant has a password. Please enter it to edit.",
-                variant: "destructive"
-              });
-              return;
+              // If no password was provided, the user needs to enter one to edit
+              if (!participantPassword) {
+                toast({
+                  title: "Password required",
+                  description: "This participant has a password. Please enter it to edit.",
+                  variant: "destructive"
+                });
+                return;
+              }
             }
             if (errorBody?.error === 'Invalid password') {
               toast({
@@ -245,6 +248,27 @@ const EventView = () => {
         }
 
         if (result?.error) throw new Error(result.error);
+
+        // If the existing response has no password, only allow editing if the new user also provides no password
+        // This prevents a second person from silently merging into a password-less response
+        // Check if the existing response is password-protected by checking the verify result
+        // The verify succeeded, meaning either no password was needed or the correct password was given
+        // If the response has no password and the joining user didn't provide one, it could be the original user OR someone else
+        // To prevent name collisions, require a password to reclaim a password-less entry
+        // Actually, check if response has a password: if verify succeeded without a password, the response is unprotected
+        if (!participantPassword && result?.exists) {
+          // Check if the response is password-protected by trying to detect from verify result
+          // If verify succeeded without providing a password, the response has no password
+          // In that case, we can't verify identity, so block re-use of the name
+          // We need to check the edge function to know if the response has a password
+          // Since verify succeeded without a password, the entry is unprotected — block name reuse
+          toast({
+            title: "Name already taken",
+            description: "Someone with this name has already responded. Please choose a different name or set a password to protect your response.",
+            variant: "destructive"
+          });
+          return;
+        }
 
         setUserResponse(existing);
         setIsEditing(true);
