@@ -29,7 +29,9 @@ export const AvailabilityGrid = ({
   responses, 
   userResponse, 
   isEditing, 
-  onAvailabilityChange 
+  isFinalizing = false,
+  onAvailabilityChange,
+  onFinalizeSlotClick,
 }: Props) => {
   const [dragMode, setDragMode] = useState<'select' | 'deselect' | null>(null);
   const [isDragging, setIsDragging] = useState(false);
