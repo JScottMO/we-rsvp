@@ -260,6 +260,7 @@ Deno.serve(async (req) => {
 
       if (error) {
         console.error('Update error:', error);
+        await enqueueErrorNotification(supabase, 'manage-response:update', error.message, { eventId, participantName });
         return new Response(
           JSON.stringify({ error: 'Failed to update response' }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
