@@ -894,16 +894,14 @@ const EventView = () => {
                       setShowFinalizeDialog(true);
                     }}
                   />
-                  {isEditing && (
+                  {isEditing && !isFinalizing && (
                     <div className="flex flex-wrap gap-2 mt-4">
                       <Button onClick={handleSaveResponse}>
                         Save response
                       </Button>
                       <Button 
                         variant="secondary"
-                        onClick={() => {
-                          setShowFinalizeDialog(true);
-                        }}
+                        onClick={() => setIsFinalizing(true)}
                       >
                         <CalendarCheck className="w-4 h-4 mr-2" />
                         Finalize event
@@ -913,6 +911,20 @@ const EventView = () => {
                         onClick={handleCancelEditing}
                       >
                         Cancel
+                      </Button>
+                    </div>
+                  )}
+                  {isFinalizing && (
+                    <div className="mt-4 p-3 bg-primary/10 border border-primary/30 rounded-md">
+                      <p className="text-sm font-medium text-primary mb-2">
+                        🎯 Click a time slot on the grid to select the final time
+                      </p>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => setIsFinalizing(false)}
+                      >
+                        Cancel finalization
                       </Button>
                     </div>
                   )}
