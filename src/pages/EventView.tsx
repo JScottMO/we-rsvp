@@ -218,24 +218,32 @@ const EventView = () => {
           }
         });
 
-        if (funcError) throw funcError;
+        if (funcError) {
+          // Parse the error response for password-related messages
+          try {
+            const errorBody = funcError?.context ? await funcError.context.json() : null;
+            if (errorBody?.requiresPassword) {
+              toast({
+                title: "Password required",
+                description: "This participant has a password. Please enter it to edit.",
+                variant: "destructive"
+              });
+              return;
+            }
+            if (errorBody?.error === 'Invalid password') {
+              toast({
+                title: "Invalid password",
+                description: "The password you entered is incorrect.",
+                variant: "destructive"
+              });
+              return;
+            }
+          } catch {
+            // Could not parse error body
+          }
+          throw funcError;
+        }
 
-        if (result?.requiresPassword) {
-          toast({
-            title: "Password required",
-            description: "This participant has a password. Please enter it to edit.",
-            variant: "destructive"
-          });
-          return;
-        }
-        if (result?.error === 'Invalid password') {
-          toast({
-            title: "Invalid password",
-            description: "The password you entered is incorrect.",
-            variant: "destructive"
-          });
-          return;
-        }
         if (result?.error) throw new Error(result.error);
 
         setUserResponse(existing);

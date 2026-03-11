@@ -192,7 +192,7 @@ Deno.serve(async (req) => {
             { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
         }
-        const salt = await bcrypt.genSalt(10);
+        const salt = bcrypt.genSaltSync(10);
         passwordHash = bcrypt.hashSync(password, salt);
       }
 
