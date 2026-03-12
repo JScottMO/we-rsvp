@@ -189,12 +189,12 @@ const HowToUse = () => {
             The heatmap provides a visual overview of everyone's availability at a glance:
           </p>
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4 mb-4">
-            <li><strong>Darker/more intense colors:</strong> More participants are available at that time</li>
-            <li><strong>Lighter colors:</strong> Fewer participants are available</li>
+            <li><strong>Darker green:</strong> More participants are available at that time</li>
+            <li><strong>Lighter green:</strong> Fewer participants are available</li>
             <li><strong>Hover over a slot:</strong> See exactly who is available during that time</li>
-            <li>The participant list on the side shows everyone who has responded</li>
+            <li>The participant list on the right side shows everyone who has responded</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Heatmap view showing color intensity varying by availability, with hover tooltip showing participant names" />
+          <ScreenshotPlaceholder caption="Screenshot: Heatmap view showing green intensity varying by availability, with hover tooltip showing participant names" />
         </section>
 
         {/* Section 7: Editing */}
