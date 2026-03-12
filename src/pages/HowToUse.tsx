@@ -78,7 +78,7 @@ const HowToUse = () => {
             <li><strong>Event Title:</strong> Give your event a clear, descriptive name (e.g., "Team Offsite Planning", "Dinner with Friends")</li>
             <li><strong>Description (Optional):</strong> Add any additional context your participants might need, like location, agenda, or special instructions</li>
           </ul>
-          <ScreenshotPlaceholder number={2} caption="Event creation form showing title, description fields, and date calendar" />
+          <img src={screenshot2} alt="Event creation form showing title, description fields, and date calendar" className="rounded-lg border border-border my-4 w-full" />
         </section>
 
         {/* Section 2: Date Selection */}
