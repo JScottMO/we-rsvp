@@ -794,6 +794,7 @@ const EventView = () => {
               <CardContent className="pt-6">
                 <h3 className="font-semibold text-lg mb-2">👋 Welcome! Here's how it works:</h3>
                 <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
+                  <li><strong>Share this event</strong> — <button onClick={copyEventLink} className="text-primary hover:underline font-medium inline">click here to copy the link</button> and send it to your friends.</li>
                   <li><strong>Click "Join event"</strong> to add your name and start selecting times.</li>
                   <li><strong>Click or drag on the grid</strong> to mark when you're available.</li>
                   <li><strong>Save your response</strong> — the grid will show where everyone overlaps.</li>
