@@ -102,7 +102,7 @@ const HowToUse = () => {
             <li>Click a selected date again to deselect it</li>
             <li>Use the "Week starts on" dropdown to change whether weeks begin on Sunday or Monday</li>
           </ul>
-          <ScreenshotPlaceholder number={3} caption="Calendar with multiple dates selected, showing the 'Week starts on' dropdown" />
+          <img src={screenshot3} alt="Calendar with multiple dates selected, showing the 'Week starts on' dropdown" className="rounded-lg border border-border my-4 w-full" />
         </section>
 
         {/* Section 3: Time Settings */}
