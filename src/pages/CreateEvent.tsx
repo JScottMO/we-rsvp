@@ -138,7 +138,8 @@ const CreateEvent = () => {
           latest_time: formData.latestTime,
           time_increment: parseInt(formData.timeIncrement),
           week_start_day: parseInt(formData.weekStartDay),
-          advanced_time_slots: advancedSlots
+          advanced_time_slots: advancedSlots,
+          timezone: formData.timezone
         })
         .select()
         .single();
