@@ -14,6 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { generateEncryptionKey, encryptText } from "@/lib/encryption";
 import { AdvancedTimeGrid } from "@/components/AdvancedTimeGrid";
+import { TimezoneSelector, getUserTimezone } from "@/components/TimezoneSelector";
 
 // Input validation constants
 const MAX_TITLE_LENGTH = 200;
@@ -31,7 +32,8 @@ const CreateEvent = () => {
     earliestTime: '09:00',
     latestTime: '17:00',
     timeIncrement: '30',
-    weekStartDay: '0'
+    weekStartDay: '0',
+    timezone: getUserTimezone()
   });
 
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
@@ -136,7 +138,8 @@ const CreateEvent = () => {
           latest_time: formData.latestTime,
           time_increment: parseInt(formData.timeIncrement),
           week_start_day: parseInt(formData.weekStartDay),
-          advanced_time_slots: advancedSlots
+          advanced_time_slots: advancedSlots,
+          timezone: formData.timezone
         })
         .select()
         .single();
@@ -403,6 +406,12 @@ const CreateEvent = () => {
                   </SelectContent>
                 </Select>
               </div>
+
+              {/* Timezone */}
+              <TimezoneSelector
+                value={formData.timezone}
+                onChange={(tz) => setFormData(prev => ({ ...prev, timezone: tz }))}
+              />
 
               {/* Earliest/latest time - shown in both modes */}
               <div className="grid grid-cols-2 gap-4">

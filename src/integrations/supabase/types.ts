@@ -27,6 +27,7 @@ export type Database = {
           is_finalized: boolean
           latest_time: string
           time_increment: number
+          timezone: string | null
           title: string
           updated_at: string
           week_start_day: number
@@ -43,6 +44,7 @@ export type Database = {
           is_finalized?: boolean
           latest_time?: string
           time_increment?: number
+          timezone?: string | null
           title: string
           updated_at?: string
           week_start_day?: number
@@ -59,6 +61,7 @@ export type Database = {
           is_finalized?: boolean
           latest_time?: string
           time_increment?: number
+          timezone?: string | null
           title?: string
           updated_at?: string
           week_start_day?: number

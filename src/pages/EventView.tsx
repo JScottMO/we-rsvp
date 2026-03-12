@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Share2, Users, CalendarDays, Clock, Lock, AlertTriangle, CalendarCheck } from "lucide-react";
+import { Share2, Users, CalendarDays, Clock, Lock, AlertTriangle, CalendarCheck, Globe } from "lucide-react";
 import { AvailabilityGrid } from "@/components/AvailabilityGrid";
 import { ParticipantList } from "@/components/ParticipantList";
 import { FinalizeEventDialog } from "@/components/FinalizeEventDialog";
@@ -27,6 +27,7 @@ interface Event {
   finalizedDate?: string;
   finalizedTime?: string;
   advancedTimeSlots?: Record<string, boolean>;
+  timezone?: string;
 }
 
 interface Response {
@@ -127,6 +128,7 @@ const EventView = () => {
           finalizedDate: eventData.finalized_date || undefined,
           finalizedTime: eventData.finalized_time || undefined,
           advancedTimeSlots: eventData.advanced_time_slots as Record<string, boolean> | undefined,
+          timezone: eventData.timezone || undefined,
         });
 
         // Fetch responses from the secure view (excludes password_hash)
@@ -728,6 +730,12 @@ const EventView = () => {
                   <p className="text-xs text-primary flex items-center gap-1 mt-1">
                     <Lock className="w-3 h-3" />
                     End-to-end encrypted
+                  </p>
+                )}
+                {event.timezone && (
+                  <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                    <Globe className="w-3 h-3" />
+                    Times shown in {event.timezone.replace(/_/g, ' ')}
                   </p>
                 )}
               </div>
