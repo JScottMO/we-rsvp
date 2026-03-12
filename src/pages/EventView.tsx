@@ -128,6 +128,7 @@ const EventView = () => {
           finalizedDate: eventData.finalized_date || undefined,
           finalizedTime: eventData.finalized_time || undefined,
           advancedTimeSlots: eventData.advanced_time_slots as Record<string, boolean> | undefined,
+          timezone: eventData.timezone || undefined,
         });
 
         // Fetch responses from the secure view (excludes password_hash)

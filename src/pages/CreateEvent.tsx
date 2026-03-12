@@ -407,6 +407,12 @@ const CreateEvent = () => {
                 </Select>
               </div>
 
+              {/* Timezone */}
+              <TimezoneSelector
+                value={formData.timezone}
+                onChange={(tz) => setFormData(prev => ({ ...prev, timezone: tz }))}
+              />
+
               {/* Earliest/latest time - shown in both modes */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
