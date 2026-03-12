@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, ArrowRight, Check, X, Minus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import profCLogo from "@/assets/prof-c-logo.png";
+
 import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
 import {
   Table,
@@ -330,18 +330,6 @@ const Compare = () => {
 
         {/* Attribution */}
         <div className="flex items-center justify-center gap-6 bg-muted rounded-lg p-4 w-fit mx-auto mb-8">
-          <a 
-            href="https://christiansonjs.com/links/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hover:opacity-80 transition-opacity"
-          >
-            <img 
-              src={profCLogo} 
-              alt="Prof C Logo" 
-              className="w-12 h-12"
-            />
-          </a>
           <a 
             href="https://buymeacoffee.com/profc" 
             target="_blank" 
