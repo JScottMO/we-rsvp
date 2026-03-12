@@ -122,7 +122,7 @@ const HowToUse = () => {
             <li><strong>Time Increment:</strong> How granular the time slots are (15 min, 30 min, 1 hour, etc.)</li>
             <li><strong>Timezone:</strong> Your local timezone is auto-detected. Use the searchable dropdown to change it if needed. Participants will see the selected timezone highlighted in yellow in the Availability section.</li>
           </ul>
-          <ScreenshotPlaceholder number={4} caption="Basic time settings showing earliest/latest time dropdowns and time increment selector" />
+          <img src={screenshot4} alt="Basic time settings showing earliest/latest time dropdowns and time increment selector" className="rounded-lg border border-border my-4 w-full" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Advanced Mode</h3>
           <p className="text-muted-foreground mb-4">
