@@ -235,7 +235,7 @@ const HowToUse = () => {
             <li>Download an iCal file or share the finalized event via email</li>
             <li>The event will be marked as finalized and no more responses will be accepted</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Finalize mode showing 'Click a time slot on the grid to select the final time' prompt" />
+          <ScreenshotPlaceholder number={12} caption="Finalize mode showing 'Click a time slot on the grid to select the final time' prompt" />
           
           <div className="bg-accent/50 rounded-lg p-4 mt-4">
             <p className="text-sm text-accent-foreground">
