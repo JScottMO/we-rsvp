@@ -1,0 +1,1 @@
+ALTER TABLE public.events ADD COLUMN timezone text DEFAULT NULL;
