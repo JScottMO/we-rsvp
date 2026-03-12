@@ -51,11 +51,20 @@ interface TzEntry {
   offsetStr: string;
 }
 
+// Common IANA timezone identifiers as fallback
+const TIMEZONE_FALLBACK = [
+  "Pacific/Midway","Pacific/Honolulu","America/Anchorage","America/Los_Angeles","America/Denver",
+  "America/Chicago","America/New_York","America/Caracas","America/Halifax","America/St_Johns",
+  "America/Argentina/Buenos_Aires","America/Sao_Paulo","Atlantic/South_Georgia","Atlantic/Azores",
+  "Europe/London","Europe/Berlin","Europe/Paris","Europe/Helsinki","Europe/Istanbul","Europe/Moscow",
+  "Asia/Dubai","Asia/Karachi","Asia/Kolkata","Asia/Kathmandu","Asia/Dhaka","Asia/Bangkok",
+  "Asia/Shanghai","Asia/Tokyo","Australia/Sydney","Pacific/Auckland","Pacific/Fiji","UTC"
+];
+
 function buildTimezoneList(): TzEntry[] {
-  // Use Intl.supportedValuesOf if available, otherwise fallback to a comprehensive list
   const tzNames: string[] = (typeof (Intl as any).supportedValuesOf === "function")
     ? (Intl as any).supportedValuesOf("timeZone")
-    : getTimezonesFallback();
+    : TIMEZONE_FALLBACK;
   const entries: TzEntry[] = tzNames.map((tz) => {
     const offset = getTimezoneOffset(tz);
     return {
