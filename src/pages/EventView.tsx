@@ -732,12 +732,6 @@ const EventView = () => {
                     End-to-end encrypted
                   </p>
                 )}
-                {event.timezone && (
-                  <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-                    <Globe className="w-3 h-3" />
-                    Times shown in {event.timezone.replace(/_/g, ' ')}
-                  </p>
-                )}
               </div>
             </div>
             <div className="flex flex-col items-end gap-2">
