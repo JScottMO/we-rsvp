@@ -162,7 +162,7 @@ const HowToUse = () => {
           <p className="text-muted-foreground mb-4">
             Click the <strong>"Join event"</strong> button next to the Availability heading. In the dialog that appears, enter your name and optionally add a password to protect your response from being edited by others. Then click <strong>"Continue"</strong>.
           </p>
-          <ScreenshotPlaceholder caption="Screenshot: Join event dialog with name and optional password fields, and Continue button" />
+          <ScreenshotPlaceholder number={7} caption="Join event dialog with name and optional password fields, and Continue button" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Step 2: Mark Your Availability</h3>
           <p className="text-muted-foreground mb-4">
