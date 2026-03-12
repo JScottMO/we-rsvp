@@ -240,9 +240,9 @@ const HowToUse = () => {
           </ul>
           <ScreenshotPlaceholder number={12} caption="Finalize mode showing 'Click a time slot on the grid to select the final time' prompt" />
           
-          <div className="bg-accent/50 rounded-lg p-4 mt-4">
-            <p className="text-sm text-accent-foreground">
-              <strong>Auto-Cleanup:</strong> Finalized events are automatically deleted after 7 days to protect everyone's privacy. 
+          <div className="bg-accent/50 rounded-lg p-6 mt-4">
+            <p className="text-base text-accent-foreground">
+              <strong className="text-lg">⚠️ Auto-Cleanup:</strong> Finalized events are automatically deleted after 7 days to protect everyone's privacy. 
               Make sure to download the calendar invite before then!
             </p>
           </div>
