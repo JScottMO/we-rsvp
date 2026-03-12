@@ -685,7 +685,12 @@ const EventView = () => {
                   ).join(' - ')}
                 </p>
               </div>
-              <Button variant="outline" size="sm" onClick={() => navigate('/')} className="flex-shrink-0">
+              <Button variant="outline" size="sm" asChild className="flex-shrink-0">
+                <a href="/">
+                  <CalendarPlus className="w-4 h-4 mr-1" />
+                  Create New Event
+                </a>
+              </Button>
                 <CalendarPlus className="w-4 h-4 mr-1" />
                 Create New Event
               </Button>
