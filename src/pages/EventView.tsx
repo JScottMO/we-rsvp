@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Share2, Users, CalendarDays, Clock, Lock, AlertTriangle, CalendarCheck, Globe } from "lucide-react";
+import { Share2, Users, CalendarDays, Clock, Lock, AlertTriangle, CalendarCheck, Globe, CalendarPlus } from "lucide-react";
 import { AvailabilityGrid } from "@/components/AvailabilityGrid";
 import { ParticipantList } from "@/components/ParticipantList";
 import { FinalizeEventDialog } from "@/components/FinalizeEventDialog";
@@ -676,7 +676,7 @@ const EventView = () => {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center gap-3 text-primary">
               <CalendarCheck className="w-5 h-5 flex-shrink-0" />
-              <div>
+              <div className="flex-1">
                 <p className="font-medium">Event confirmed!</p>
                 <p className="text-sm">
                   {format(parseISO(event.finalizedDate), 'EEEE, MMMM d, yyyy')} at{' '}
@@ -685,6 +685,12 @@ const EventView = () => {
                   ).join(' - ')}
                 </p>
               </div>
+              <Button variant="outline" size="sm" asChild className="flex-shrink-0">
+                <a href="/">
+                  <CalendarPlus className="w-4 h-4 mr-1" />
+                  Create New Event
+                </a>
+              </Button>
             </div>
           </div>
         </div>
