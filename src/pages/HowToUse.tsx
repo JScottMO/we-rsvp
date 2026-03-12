@@ -5,6 +5,14 @@ import profCLogo from "@/assets/prof-c-logo.png";
 import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
 import screenshot1 from "@/assets/howto-screenshot-1.png";
 import screenshot2 from "@/assets/howto-screenshot-2.png";
+import screenshot3 from "@/assets/howto-screenshot-3.png";
+import screenshot4 from "@/assets/howto-screenshot-4.png";
+import screenshot5 from "@/assets/howto-screenshot-5.png";
+import screenshot6 from "@/assets/howto-screenshot-6.png";
+import screenshot7 from "@/assets/howto-screenshot-7.png";
+import screenshot8 from "@/assets/howto-screenshot-8.png";
+import screenshot9 from "@/assets/howto-screenshot-9.png";
+import screenshot10 from "@/assets/howto-screenshot-10.png";
 
 const ScreenshotPlaceholder = ({ number, caption }: { number: number; caption: string }) => (
   <div className="border-2 border-dashed border-muted-foreground/30 rounded-lg p-8 bg-muted/30 flex flex-col items-center justify-center gap-2 my-4">
@@ -94,7 +102,7 @@ const HowToUse = () => {
             <li>Click a selected date again to deselect it</li>
             <li>Use the "Week starts on" dropdown to change whether weeks begin on Sunday or Monday</li>
           </ul>
-          <ScreenshotPlaceholder number={3} caption="Calendar with multiple dates selected, showing the 'Week starts on' dropdown" />
+          <img src={screenshot3} alt="Calendar with multiple dates selected, showing the 'Week starts on' dropdown" className="rounded-lg border border-border my-4 w-full" />
         </section>
 
         {/* Section 3: Time Settings */}
@@ -114,7 +122,7 @@ const HowToUse = () => {
             <li><strong>Time Increment:</strong> How granular the time slots are (15 min, 30 min, 1 hour, etc.)</li>
             <li><strong>Timezone:</strong> Your local timezone is auto-detected. Use the searchable dropdown to change it if needed. Participants will see the selected timezone highlighted in yellow in the Availability section.</li>
           </ul>
-          <ScreenshotPlaceholder number={4} caption="Basic time settings showing earliest/latest time dropdowns and time increment selector" />
+          <img src={screenshot4} alt="Basic time settings showing earliest/latest time dropdowns and time increment selector" className="rounded-lg border border-border my-4 w-full" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Advanced Mode</h3>
           <p className="text-muted-foreground mb-4">
@@ -128,7 +136,7 @@ const HowToUse = () => {
             <li>Click and drag to select multiple slots at once</li>
             <li>Only enabled slots will be shown to participants</li>
           </ul>
-          <ScreenshotPlaceholder number={5} caption="Advanced time grid showing different time slots enabled for different dates" />
+          <img src={screenshot5} alt="Advanced time grid showing different time slots enabled for different dates" className="rounded-lg border border-border my-4 w-full" />
         </section>
 
         {/* Section 4: Sharing */}
@@ -144,7 +152,7 @@ const HowToUse = () => {
             <li>Anyone with the link can respond—no account needed</li>
             <li>The link contains encryption keys, so participants' names are protected</li>
           </ul>
-          <ScreenshotPlaceholder number={6} caption="Event page showing the 'Share' button and welcome card with copy link shortcut" />
+          <img src={screenshot6} alt="Event page showing the 'Share' button and welcome card with copy link shortcut" className="rounded-lg border border-border my-4 w-full" />
           
           <div className="bg-accent/50 rounded-lg p-4 mt-4">
             <p className="text-sm text-accent-foreground">
@@ -165,7 +173,7 @@ const HowToUse = () => {
           <p className="text-muted-foreground mb-4">
             Click the <strong>"Join event"</strong> button next to the Availability heading. In the dialog that appears, enter your name and optionally add a password to protect your response from being edited by others. Then click <strong>"Continue"</strong>.
           </p>
-          <ScreenshotPlaceholder number={7} caption="Join event dialog with name and optional password fields, and Continue button" />
+          <img src={screenshot7} alt="Join event dialog with name and optional password fields, and Continue button" className="rounded-lg border border-border my-4 w-full max-w-md" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Step 2: Mark Your Availability</h3>
           <p className="text-muted-foreground mb-4">
@@ -177,13 +185,13 @@ const HowToUse = () => {
             <li>Your selected slots are outlined in black</li>
             <li>Green shading shows where others are also available</li>
           </ul>
-          <ScreenshotPlaceholder number={8} caption="Availability grid with some time slots selected (outlined in black with green shading)" />
+          <img src={screenshot8} alt="Availability grid with some time slots selected (outlined in black with green shading)" className="rounded-lg border border-border my-4 w-full" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Step 3: Save Your Response</h3>
           <p className="text-muted-foreground mb-4">
             Click <strong>"Save response"</strong> to submit your availability. Your response will immediately appear in the participant list and be reflected in the heatmap.
           </p>
-          <ScreenshotPlaceholder number={9} caption="'Save response', 'Finalize event', and 'Cancel' buttons below the availability grid" />
+          <img src={screenshot9} alt="'Save response', 'Finalize event', and 'Cancel' buttons below the availability grid" className="rounded-lg border border-border my-4 w-full max-w-md" />
         </section>
 
         {/* Section 6: Heatmap */}
@@ -198,7 +206,7 @@ const HowToUse = () => {
             <li><strong>Hover over a slot:</strong> See the percentage and number of participants available during that time (e.g., "75% available (3/4)")</li>
             <li>The participant list on the right side shows everyone who has responded</li>
           </ul>
-          <ScreenshotPlaceholder number={10} caption="Heatmap view showing green intensity varying by availability, with hover tooltip showing participant names" />
+          <img src={screenshot10} alt="Heatmap view showing green intensity varying by availability, with hover tooltip showing availability percentage" className="rounded-lg border border-border my-4 w-full max-w-md" />
         </section>
 
         {/* Section 7: Editing */}
