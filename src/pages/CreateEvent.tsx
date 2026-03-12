@@ -32,7 +32,8 @@ const CreateEvent = () => {
     earliestTime: '09:00',
     latestTime: '17:00',
     timeIncrement: '30',
-    weekStartDay: '0'
+    weekStartDay: '0',
+    timezone: getUserTimezone()
   });
 
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
