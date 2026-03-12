@@ -69,7 +69,7 @@ const HowToUse = () => {
             Getting started is simple. From the homepage, enter a name for your event and click "Get started". 
             You'll be taken to the event creation page where you can add more details.
           </p>
-          <ScreenshotPlaceholder caption="Screenshot: Homepage with event name input field and 'Get started' button" />
+          <ScreenshotPlaceholder number={1} caption="Homepage with event name input field and 'Get started' button" />
           
           <h3 className="text-lg font-semibold mt-6 mb-2">Event Details</h3>
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
