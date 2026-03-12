@@ -222,7 +222,7 @@ const HowToUse = () => {
             <li>If you set a password, you'll need to enter it</li>
             <li>Update your time selections and click <strong>"Save response"</strong></li>
           </ul>
-          <ScreenshotPlaceholder number={11} caption="'Edit response' button in the Availability card header" />
+          
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Removing Your Response</h3>
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4 mb-4">
