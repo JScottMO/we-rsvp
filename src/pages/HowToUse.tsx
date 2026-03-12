@@ -111,7 +111,7 @@ const HowToUse = () => {
             <li><strong>Latest Time:</strong> The latest time slot participants can select</li>
             <li><strong>Time Increment:</strong> How granular the time slots are (15 min, 30 min, 1 hour, etc.)</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Basic time settings showing earliest/latest time dropdowns and time increment selector" />
+          <ScreenshotPlaceholder number={4} caption="Basic time settings showing earliest/latest time dropdowns and time increment selector" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Advanced Mode</h3>
           <p className="text-muted-foreground mb-4">
