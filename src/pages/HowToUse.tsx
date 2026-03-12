@@ -206,7 +206,7 @@ const HowToUse = () => {
             <li><strong>Hover over a slot:</strong> See the percentage and number of participants available during that time (e.g., "75% available (3/4)")</li>
             <li>The participant list on the right side shows everyone who has responded</li>
           </ul>
-          <ScreenshotPlaceholder number={10} caption="Heatmap view showing green intensity varying by availability, with hover tooltip showing participant names" />
+          <img src={screenshot10} alt="Heatmap view showing green intensity varying by availability, with hover tooltip showing availability percentage" className="rounded-lg border border-border my-4 w-full max-w-md" />
         </section>
 
         {/* Section 7: Editing */}
