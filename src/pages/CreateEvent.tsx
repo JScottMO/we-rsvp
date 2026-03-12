@@ -238,6 +238,22 @@ const CreateEvent = () => {
               </p>
             </CardHeader>
             <CardContent className="space-y-4">
+              {/* Week starts on */}
+              <div>
+                <Label htmlFor="weekstart">Week starts on</Label>
+                <Select value={formData.weekStartDay} onValueChange={(value) => 
+                  setFormData(prev => ({ ...prev, weekStartDay: value }))
+                }>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">Sunday</SelectItem>
+                    <SelectItem value="1">Monday</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
               {/* Quick date options */}
               <div className="flex gap-2 flex-wrap">
                 <Button
@@ -353,40 +369,24 @@ const CreateEvent = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Common settings for both modes */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="increment">Time increment</Label>
-                  <Select value={formData.timeIncrement} onValueChange={(value) => 
-                    setFormData(prev => ({ ...prev, timeIncrement: value }))
-                  }>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="15">15 minutes</SelectItem>
-                      <SelectItem value="30">30 minutes</SelectItem>
-                      <SelectItem value="60">1 hour</SelectItem>
-                      <SelectItem value="90">1.5 hours</SelectItem>
-                      <SelectItem value="120">2 hours</SelectItem>
-                      <SelectItem value="150">2.5 hours</SelectItem>
-                      <SelectItem value="180">3 hours</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="weekstart">Week starts on</Label>
-                  <Select value={formData.weekStartDay} onValueChange={(value) => 
-                    setFormData(prev => ({ ...prev, weekStartDay: value }))
-                  }>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="0">Sunday</SelectItem>
-                      <SelectItem value="1">Monday</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div>
+                <Label htmlFor="increment">Time increment</Label>
+                <Select value={formData.timeIncrement} onValueChange={(value) => 
+                  setFormData(prev => ({ ...prev, timeIncrement: value }))
+                }>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="15">15 minutes</SelectItem>
+                    <SelectItem value="30">30 minutes</SelectItem>
+                    <SelectItem value="60">1 hour</SelectItem>
+                    <SelectItem value="90">1.5 hours</SelectItem>
+                    <SelectItem value="120">2 hours</SelectItem>
+                    <SelectItem value="150">2.5 hours</SelectItem>
+                    <SelectItem value="180">3 hours</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Earliest/latest time - shown in both modes */}
