@@ -195,7 +195,7 @@ const HowToUse = () => {
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4 mb-4">
             <li><strong>Darker green:</strong> More participants are available at that time</li>
             <li><strong>Lighter green:</strong> Fewer participants are available</li>
-            <li><strong>Hover over a slot:</strong> See exactly who is available during that time</li>
+            <li><strong>Hover over a slot:</strong> See the percentage and number of participants available during that time (e.g., "75% available (3/4)")</li>
             <li>The participant list on the right side shows everyone who has responded</li>
           </ul>
           <ScreenshotPlaceholder number={10} caption="Heatmap view showing green intensity varying by availability, with hover tooltip showing participant names" />
