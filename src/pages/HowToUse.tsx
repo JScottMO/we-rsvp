@@ -3,6 +3,8 @@ import { CalendarDays, Image } from "lucide-react";
 import { Link } from "react-router-dom";
 import profCLogo from "@/assets/prof-c-logo.png";
 import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
+import screenshot1 from "@/assets/howto-screenshot-1.png";
+import screenshot2 from "@/assets/howto-screenshot-2.png";
 
 const ScreenshotPlaceholder = ({ number, caption }: { number: number; caption: string }) => (
   <div className="border-2 border-dashed border-muted-foreground/30 rounded-lg p-8 bg-muted/30 flex flex-col items-center justify-center gap-2 my-4">
