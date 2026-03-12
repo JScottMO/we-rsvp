@@ -3,6 +3,8 @@ import { CalendarDays, Image } from "lucide-react";
 import { Link } from "react-router-dom";
 import profCLogo from "@/assets/prof-c-logo.png";
 import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
+import screenshot1 from "@/assets/howto-screenshot-1.png";
+import screenshot2 from "@/assets/howto-screenshot-2.png";
 
 const ScreenshotPlaceholder = ({ number, caption }: { number: number; caption: string }) => (
   <div className="border-2 border-dashed border-muted-foreground/30 rounded-lg p-8 bg-muted/30 flex flex-col items-center justify-center gap-2 my-4">
@@ -69,14 +71,14 @@ const HowToUse = () => {
             Getting started is simple. From the homepage, enter a name for your event and click "Get started". 
             You'll be taken to the event creation page where you can add more details.
           </p>
-          <ScreenshotPlaceholder number={1} caption="Homepage with event name input field and 'Get started' button" />
+          <img src={screenshot1} alt="Homepage with event name input field and 'Get started' button" className="rounded-lg border border-border my-4 w-full" />
           
           <h3 className="text-lg font-semibold mt-6 mb-2">Event Details</h3>
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
             <li><strong>Event Title:</strong> Give your event a clear, descriptive name (e.g., "Team Offsite Planning", "Dinner with Friends")</li>
             <li><strong>Description (Optional):</strong> Add any additional context your participants might need, like location, agenda, or special instructions</li>
           </ul>
-          <ScreenshotPlaceholder number={2} caption="Event creation form showing title, description fields, and date calendar" />
+          <img src={screenshot2} alt="Event creation form showing title, description fields, and date calendar" className="rounded-lg border border-border my-4 w-full" />
         </section>
 
         {/* Section 2: Date Selection */}
