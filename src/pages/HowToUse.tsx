@@ -227,12 +227,14 @@ const HowToUse = () => {
             Once you've found the best time, you can finalize your event to lock in the chosen date and time:
           </p>
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4 mb-4">
-            <li>Click the "Finalize Event" button</li>
-            <li>Select the final date and time from the available options</li>
-            <li>Optionally download an iCal file to add to your calendar</li>
-            <li>The event will be marked as finalized and participants will see the chosen time</li>
+            <li>First, <strong>join the event</strong> by clicking "Join event" and entering your name</li>
+            <li>Click the <strong>"Finalize event"</strong> button that appears below the grid</li>
+            <li><strong>Click directly on a time slot</strong> in the grid to select the final date and time</li>
+            <li>A confirmation dialog will appear — review the selection and confirm</li>
+            <li>Download an iCal file or share the finalized event via email</li>
+            <li>The event will be marked as finalized and no more responses will be accepted</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Finalize event dialog showing date/time selection and calendar download option" />
+          <ScreenshotPlaceholder caption="Screenshot: Finalize mode showing 'Click a time slot on the grid to select the final time' prompt" />
           
           <div className="bg-accent/50 rounded-lg p-4 mt-4">
             <p className="text-sm text-accent-foreground">
