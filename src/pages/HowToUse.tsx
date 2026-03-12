@@ -110,6 +110,7 @@ const HowToUse = () => {
             <li><strong>Earliest Time:</strong> The earliest time slot participants can select</li>
             <li><strong>Latest Time:</strong> The latest time slot participants can select</li>
             <li><strong>Time Increment:</strong> How granular the time slots are (15 min, 30 min, 1 hour, etc.)</li>
+            <li><strong>Timezone:</strong> Your local timezone is auto-detected. Use the searchable dropdown to change it if needed. Participants will see the selected timezone highlighted in yellow in the Availability section.</li>
           </ul>
           <ScreenshotPlaceholder number={4} caption="Basic time settings showing earliest/latest time dropdowns and time increment selector" />
 
