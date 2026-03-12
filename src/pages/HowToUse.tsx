@@ -185,7 +185,7 @@ const HowToUse = () => {
             <li>Your selected slots are outlined in black</li>
             <li>Green shading shows where others are also available</li>
           </ul>
-          <ScreenshotPlaceholder number={8} caption="Availability grid with some time slots selected (outlined in black with green shading)" />
+          <img src={screenshot8} alt="Availability grid with some time slots selected (outlined in black with green shading)" className="rounded-lg border border-border my-4 w-full" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Step 3: Save Your Response</h3>
           <p className="text-muted-foreground mb-4">
