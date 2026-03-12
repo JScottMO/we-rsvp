@@ -52,7 +52,10 @@ interface TzEntry {
 }
 
 function buildTimezoneList(): TzEntry[] {
-  const tzNames = Intl.supportedValuesOf("timeZone");
+  // Use Intl.supportedValuesOf if available, otherwise fallback to a comprehensive list
+  const tzNames: string[] = (typeof (Intl as any).supportedValuesOf === "function")
+    ? (Intl as any).supportedValuesOf("timeZone")
+    : getTimezonesFallback();
   const entries: TzEntry[] = tzNames.map((tz) => {
     const offset = getTimezoneOffset(tz);
     return {
