@@ -131,15 +131,16 @@ const HowToUse = () => {
         <section id="sharing" className="mb-12 scroll-mt-8">
           <h2 className="text-2xl font-bold text-foreground mb-4 border-b pb-2">4. Sharing Your Event</h2>
           <p className="text-muted-foreground mb-4">
-            Once you create your event, you'll receive a unique shareable link. This is how participants will access your event.
+            Once you create your event, you'll be taken to the event page with a unique shareable link. This is how participants will access your event.
           </p>
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4 mb-4">
-            <li>Click "Copy Link" to copy the event URL to your clipboard</li>
+            <li>Click the <strong>"Share"</strong> button in the top-right corner to copy the event URL to your clipboard</li>
+            <li>If no one has responded yet, you'll also see a welcome card with a quick <strong>"click here to copy the link"</strong> shortcut</li>
             <li>Share the link via email, messaging apps, or any other channel</li>
             <li>Anyone with the link can respond—no account needed</li>
             <li>The link contains encryption keys, so participants' names are protected</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Event page showing the share link section with 'Copy Link' button" />
+          <ScreenshotPlaceholder caption="Screenshot: Event page showing the 'Share' button and welcome card with copy link shortcut" />
           
           <div className="bg-accent/50 rounded-lg p-4 mt-4">
             <p className="text-sm text-accent-foreground">
