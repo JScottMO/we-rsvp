@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarDays, Clock, Users, Shield } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import profCLogo from "@/assets/prof-c-logo.png";
-import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
+import { EmailSignup } from "@/components/EmailSignup";
 
 const Index = () => {
   const [eventTitle, setEventTitle] = useState("");
