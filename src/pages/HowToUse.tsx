@@ -136,7 +136,7 @@ const HowToUse = () => {
             <li>Click and drag to select multiple slots at once</li>
             <li>Only enabled slots will be shown to participants</li>
           </ul>
-          <ScreenshotPlaceholder number={5} caption="Advanced time grid showing different time slots enabled for different dates" />
+          <img src={screenshot5} alt="Advanced time grid showing different time slots enabled for different dates" className="rounded-lg border border-border my-4 w-full" />
         </section>
 
         {/* Section 4: Sharing */}
