@@ -27,6 +27,7 @@ interface Event {
   finalizedDate?: string;
   finalizedTime?: string;
   advancedTimeSlots?: Record<string, boolean>;
+  timezone?: string;
 }
 
 interface Response {
