@@ -425,6 +425,9 @@ const CreateEvent = () => {
                   />
                 </div>
               </div>
+              {timeError && (
+                <p className="text-sm text-destructive">{timeError}</p>
+              )}
 
               {/* Advanced mode: time grid */}
               {advancedMode && (
