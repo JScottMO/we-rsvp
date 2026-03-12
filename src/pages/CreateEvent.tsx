@@ -14,6 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { generateEncryptionKey, encryptText } from "@/lib/encryption";
 import { AdvancedTimeGrid } from "@/components/AdvancedTimeGrid";
+import { TimezoneSelector, getUserTimezone } from "@/components/TimezoneSelector";
 
 // Input validation constants
 const MAX_TITLE_LENGTH = 200;
