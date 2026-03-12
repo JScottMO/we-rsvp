@@ -5,6 +5,14 @@ import profCLogo from "@/assets/prof-c-logo.png";
 import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
 import screenshot1 from "@/assets/howto-screenshot-1.png";
 import screenshot2 from "@/assets/howto-screenshot-2.png";
+import screenshot3 from "@/assets/howto-screenshot-3.png";
+import screenshot4 from "@/assets/howto-screenshot-4.png";
+import screenshot5 from "@/assets/howto-screenshot-5.png";
+import screenshot6 from "@/assets/howto-screenshot-6.png";
+import screenshot7 from "@/assets/howto-screenshot-7.png";
+import screenshot8 from "@/assets/howto-screenshot-8.png";
+import screenshot9 from "@/assets/howto-screenshot-9.png";
+import screenshot10 from "@/assets/howto-screenshot-10.png";
 
 const ScreenshotPlaceholder = ({ number, caption }: { number: number; caption: string }) => (
   <div className="border-2 border-dashed border-muted-foreground/30 rounded-lg p-8 bg-muted/30 flex flex-col items-center justify-center gap-2 my-4">
