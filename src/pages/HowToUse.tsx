@@ -131,15 +131,16 @@ const HowToUse = () => {
         <section id="sharing" className="mb-12 scroll-mt-8">
           <h2 className="text-2xl font-bold text-foreground mb-4 border-b pb-2">4. Sharing Your Event</h2>
           <p className="text-muted-foreground mb-4">
-            Once you create your event, you'll receive a unique shareable link. This is how participants will access your event.
+            Once you create your event, you'll be taken to the event page with a unique shareable link. This is how participants will access your event.
           </p>
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4 mb-4">
-            <li>Click "Copy Link" to copy the event URL to your clipboard</li>
+            <li>Click the <strong>"Share"</strong> button in the top-right corner to copy the event URL to your clipboard</li>
+            <li>If no one has responded yet, you'll also see a welcome card with a quick <strong>"click here to copy the link"</strong> shortcut</li>
             <li>Share the link via email, messaging apps, or any other channel</li>
             <li>Anyone with the link can respond—no account needed</li>
             <li>The link contains encryption keys, so participants' names are protected</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Event page showing the share link section with 'Copy Link' button" />
+          <ScreenshotPlaceholder caption="Screenshot: Event page showing the 'Share' button and welcome card with copy link shortcut" />
           
           <div className="bg-accent/50 rounded-lg p-4 mt-4">
             <p className="text-sm text-accent-foreground">
@@ -158,9 +159,9 @@ const HowToUse = () => {
           
           <h3 className="text-lg font-semibold mt-6 mb-2">Step 1: Enter Your Name</h3>
           <p className="text-muted-foreground mb-4">
-            Click "Join Event" and enter your name. Optionally, add a password if you want to protect your response from being edited by others.
+            Click the <strong>"Join event"</strong> button next to the Availability heading. In the dialog that appears, enter your name and optionally add a password to protect your response from being edited by others. Then click <strong>"Continue"</strong>.
           </p>
-          <ScreenshotPlaceholder caption="Screenshot: Join event dialog with name and optional password fields" />
+          <ScreenshotPlaceholder caption="Screenshot: Join event dialog with name and optional password fields, and Continue button" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Step 2: Mark Your Availability</h3>
           <p className="text-muted-foreground mb-4">
@@ -169,16 +170,16 @@ const HowToUse = () => {
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4 mb-4">
             <li>Click individual time slots to toggle them</li>
             <li>Click and drag to select multiple slots at once</li>
-            <li>Green slots = you're available</li>
-            <li>Gray slots = you're not available (or the organizer didn't offer that time)</li>
+            <li>Your selected slots are outlined in black</li>
+            <li>Green shading shows where others are also available</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Availability grid with some time slots selected (green)" />
+          <ScreenshotPlaceholder caption="Screenshot: Availability grid with some time slots selected (outlined in black with green shading)" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Step 3: Save Your Response</h3>
           <p className="text-muted-foreground mb-4">
-            Click "Save" to submit your availability. Your response will immediately appear in the participant list and be reflected in the heatmap.
+            Click <strong>"Save response"</strong> to submit your availability. Your response will immediately appear in the participant list and be reflected in the heatmap.
           </p>
-          <ScreenshotPlaceholder caption="Screenshot: Save and Cancel buttons below the availability grid" />
+          <ScreenshotPlaceholder caption="Screenshot: 'Save response', 'Finalize event', and 'Cancel' buttons below the availability grid" />
         </section>
 
         {/* Section 6: Heatmap */}
@@ -188,12 +189,12 @@ const HowToUse = () => {
             The heatmap provides a visual overview of everyone's availability at a glance:
           </p>
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4 mb-4">
-            <li><strong>Darker/more intense colors:</strong> More participants are available at that time</li>
-            <li><strong>Lighter colors:</strong> Fewer participants are available</li>
+            <li><strong>Darker green:</strong> More participants are available at that time</li>
+            <li><strong>Lighter green:</strong> Fewer participants are available</li>
             <li><strong>Hover over a slot:</strong> See exactly who is available during that time</li>
-            <li>The participant list on the side shows everyone who has responded</li>
+            <li>The participant list on the right side shows everyone who has responded</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Heatmap view showing color intensity varying by availability, with hover tooltip showing participant names" />
+          <ScreenshotPlaceholder caption="Screenshot: Heatmap view showing green intensity varying by availability, with hover tooltip showing participant names" />
         </section>
 
         {/* Section 7: Editing */}
@@ -205,16 +206,15 @@ const HowToUse = () => {
           
           <h3 className="text-lg font-semibold mt-6 mb-2">Editing Your Response</h3>
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4 mb-4">
-            <li>Find your name in the participant list</li>
-            <li>Click the edit (pencil) icon next to your name</li>
+            <li>Click the <strong>"Join event"</strong> button again and enter your name (it will change to <strong>"Edit response"</strong> if you've already responded)</li>
             <li>If you set a password, you'll need to enter it</li>
-            <li>Update your time selections and click "Save"</li>
+            <li>Update your time selections and click <strong>"Save response"</strong></li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Participant list showing the edit icon next to a participant's name" />
+          <ScreenshotPlaceholder caption="Screenshot: 'Edit response' button in the Availability card header" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Removing Your Response</h3>
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4 mb-4">
-            <li>While editing, click "Cancel" to remove your response entirely</li>
+            <li>While editing, click <strong>"Cancel"</strong> to remove your response entirely</li>
             <li>If you set a password, you'll need to confirm with your password</li>
             <li>Your response will be permanently deleted from the event</li>
           </ul>
@@ -227,12 +227,14 @@ const HowToUse = () => {
             Once you've found the best time, you can finalize your event to lock in the chosen date and time:
           </p>
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4 mb-4">
-            <li>Click the "Finalize Event" button</li>
-            <li>Select the final date and time from the available options</li>
-            <li>Optionally download an iCal file to add to your calendar</li>
-            <li>The event will be marked as finalized and participants will see the chosen time</li>
+            <li>First, <strong>join the event</strong> by clicking "Join event" and entering your name</li>
+            <li>Click the <strong>"Finalize event"</strong> button that appears below the grid</li>
+            <li><strong>Click directly on a time slot</strong> in the grid to select the final date and time</li>
+            <li>A confirmation dialog will appear — review the selection and confirm</li>
+            <li>Download an iCal file or share the finalized event via email</li>
+            <li>The event will be marked as finalized and no more responses will be accepted</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Finalize event dialog showing date/time selection and calendar download option" />
+          <ScreenshotPlaceholder caption="Screenshot: Finalize mode showing 'Click a time slot on the grid to select the final time' prompt" />
           
           <div className="bg-accent/50 rounded-lg p-4 mt-4">
             <p className="text-sm text-accent-foreground">
