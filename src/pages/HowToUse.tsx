@@ -195,7 +195,7 @@ const HowToUse = () => {
             <li><strong>Hover over a slot:</strong> See exactly who is available during that time</li>
             <li>The participant list on the right side shows everyone who has responded</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Heatmap view showing green intensity varying by availability, with hover tooltip showing participant names" />
+          <ScreenshotPlaceholder number={10} caption="Heatmap view showing green intensity varying by availability, with hover tooltip showing participant names" />
         </section>
 
         {/* Section 7: Editing */}
