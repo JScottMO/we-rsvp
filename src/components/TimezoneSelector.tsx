@@ -61,6 +61,20 @@ const TIMEZONE_FALLBACK = [
   "Asia/Shanghai","Asia/Tokyo","Australia/Sydney","Pacific/Auckland","Pacific/Fiji","UTC"
 ];
 
+// Preferred representative timezone per offset (well-known cities)
+const PREFERRED_ZONES = new Set([
+  "Pacific/Midway", "Pacific/Honolulu", "Pacific/Marquesas", "America/Anchorage",
+  "America/Los_Angeles", "America/Denver", "America/Chicago", "America/New_York",
+  "America/Caracas", "America/Halifax", "America/St_Johns",
+  "America/Argentina/Buenos_Aires", "America/Sao_Paulo", "Atlantic/South_Georgia",
+  "Atlantic/Azores", "Atlantic/Cape_Verde", "UTC", "Europe/London", "Europe/Berlin",
+  "Europe/Helsinki", "Europe/Istanbul", "Europe/Moscow", "Asia/Tehran", "Asia/Dubai",
+  "Asia/Kabul", "Asia/Karachi", "Asia/Kolkata", "Asia/Kathmandu", "Asia/Dhaka",
+  "Asia/Yangon", "Asia/Bangkok", "Asia/Shanghai", "Asia/Tokyo", "Australia/Adelaide",
+  "Australia/Sydney", "Pacific/Noumea", "Pacific/Auckland", "Pacific/Chatham",
+  "Pacific/Tongatapu", "Pacific/Kiritimati",
+]);
+
 function buildTimezoneList(): TzEntry[] {
   const tzNames: string[] = (typeof (Intl as any).supportedValuesOf === "function")
     ? (Intl as any).supportedValuesOf("timeZone")
@@ -75,7 +89,20 @@ function buildTimezoneList(): TzEntry[] {
     };
   });
   entries.sort((a, b) => a.offset - b.offset || a.label.localeCompare(b.label));
-  return entries;
+
+  // Deduplicate: keep one entry per unique offset, preferring well-known cities
+  const seen = new Map<number, TzEntry>();
+  for (const entry of entries) {
+    const existing = seen.get(entry.offset);
+    if (!existing) {
+      seen.set(entry.offset, entry);
+    } else if (PREFERRED_ZONES.has(entry.id) && !PREFERRED_ZONES.has(existing.id)) {
+      seen.set(entry.offset, entry);
+    }
+  }
+  const deduped = Array.from(seen.values());
+  deduped.sort((a, b) => a.offset - b.offset);
+  return deduped;
 }
 
 export function getUserTimezone(): string {
