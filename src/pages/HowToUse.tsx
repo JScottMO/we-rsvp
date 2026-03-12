@@ -206,16 +206,15 @@ const HowToUse = () => {
           
           <h3 className="text-lg font-semibold mt-6 mb-2">Editing Your Response</h3>
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4 mb-4">
-            <li>Find your name in the participant list</li>
-            <li>Click the edit (pencil) icon next to your name</li>
+            <li>Click the <strong>"Join event"</strong> button again and enter your name (it will change to <strong>"Edit response"</strong> if you've already responded)</li>
             <li>If you set a password, you'll need to enter it</li>
-            <li>Update your time selections and click "Save"</li>
+            <li>Update your time selections and click <strong>"Save response"</strong></li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Participant list showing the edit icon next to a participant's name" />
+          <ScreenshotPlaceholder caption="Screenshot: 'Edit response' button in the Availability card header" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Removing Your Response</h3>
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4 mb-4">
-            <li>While editing, click "Cancel" to remove your response entirely</li>
+            <li>While editing, click <strong>"Cancel"</strong> to remove your response entirely</li>
             <li>If you set a password, you'll need to confirm with your password</li>
             <li>Your response will be permanently deleted from the event</li>
           </ul>
