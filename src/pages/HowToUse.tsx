@@ -180,7 +180,7 @@ const HowToUse = () => {
           <p className="text-muted-foreground mb-4">
             Click <strong>"Save response"</strong> to submit your availability. Your response will immediately appear in the participant list and be reflected in the heatmap.
           </p>
-          <ScreenshotPlaceholder caption="Screenshot: 'Save response', 'Finalize event', and 'Cancel' buttons below the availability grid" />
+          <ScreenshotPlaceholder number={9} caption="'Save response', 'Finalize event', and 'Cancel' buttons below the availability grid" />
         </section>
 
         {/* Section 6: Heatmap */}
