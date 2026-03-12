@@ -238,6 +238,22 @@ const CreateEvent = () => {
               </p>
             </CardHeader>
             <CardContent className="space-y-4">
+              {/* Week starts on */}
+              <div>
+                <Label htmlFor="weekstart">Week starts on</Label>
+                <Select value={formData.weekStartDay} onValueChange={(value) => 
+                  setFormData(prev => ({ ...prev, weekStartDay: value }))
+                }>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">Sunday</SelectItem>
+                    <SelectItem value="1">Monday</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
               {/* Quick date options */}
               <div className="flex gap-2 flex-wrap">
                 <Button
