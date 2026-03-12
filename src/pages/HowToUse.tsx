@@ -152,7 +152,7 @@ const HowToUse = () => {
             <li>Anyone with the link can respond—no account needed</li>
             <li>The link contains encryption keys, so participants' names are protected</li>
           </ul>
-          <ScreenshotPlaceholder number={6} caption="Event page showing the 'Share' button and welcome card with copy link shortcut" />
+          <img src={screenshot6} alt="Event page showing the 'Share' button and welcome card with copy link shortcut" className="rounded-lg border border-border my-4 w-full" />
           
           <div className="bg-accent/50 rounded-lg p-4 mt-4">
             <p className="text-sm text-accent-foreground">
