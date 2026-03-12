@@ -691,9 +691,6 @@ const EventView = () => {
                   Create New Event
                 </a>
               </Button>
-                <CalendarPlus className="w-4 h-4 mr-1" />
-                Create New Event
-              </Button>
             </div>
           </div>
         </div>
