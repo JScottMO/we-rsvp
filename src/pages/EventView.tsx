@@ -831,7 +831,15 @@ const EventView = () => {
             <div className="lg:col-span-3">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
-                  <CardTitle>Availability</CardTitle>
+                  <div>
+                    <CardTitle>Availability</CardTitle>
+                    {event.timezone && (
+                      <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                        <Globe className="w-3 h-3" />
+                        Times shown in <span className="bg-yellow-200 dark:bg-yellow-900 text-foreground px-1 rounded font-medium">{event.timezone.replace(/_/g, ' ')}</span>
+                      </p>
+                    )}
+                  </div>
                   {!isEditing && !event.isFinalized && (
                     <Dialog open={showJoinDialog} onOpenChange={setShowJoinDialog}>
                       <DialogTrigger asChild>
