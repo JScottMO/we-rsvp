@@ -160,7 +160,22 @@ const CreateEvent = () => {
     }
   };
 
-  const isValid = formData.title.trim() && selectedDates.length > 0;
+  const timeToMinutes = (time: string) => {
+    const [h, m] = time.split(':').map(Number);
+    return h * 60 + m;
+  };
+
+  const earliestMinutes = timeToMinutes(formData.earliestTime);
+  const latestMinutes = timeToMinutes(formData.latestTime);
+  const incrementMinutes = parseInt(formData.timeIncrement);
+  const timeRangeValid = latestMinutes > earliestMinutes && (latestMinutes - earliestMinutes) >= incrementMinutes;
+  const timeError = !timeRangeValid
+    ? latestMinutes <= earliestMinutes
+      ? "Latest time must be after earliest time."
+      : "The time range must be at least as long as the time increment."
+    : null;
+
+  const isValid = formData.title.trim() && selectedDates.length > 0 && timeRangeValid;
 
   return (
     <div className="min-h-screen bg-background">
@@ -410,6 +425,9 @@ const CreateEvent = () => {
                   />
                 </div>
               </div>
+              {timeError && (
+                <p className="text-sm text-destructive">{timeError}</p>
+              )}
 
               {/* Advanced mode: time grid */}
               {advancedMode && (
