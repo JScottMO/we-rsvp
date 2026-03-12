@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import profCLogo from "@/assets/prof-c-logo.png";
 import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
 
-const ScreenshotPlaceholder = ({ caption }: { caption: string }) => (
+const ScreenshotPlaceholder = ({ number, caption }: { number: number; caption: string }) => (
   <div className="border-2 border-dashed border-muted-foreground/30 rounded-lg p-8 bg-muted/30 flex flex-col items-center justify-center gap-2 my-4">
     <Image className="w-12 h-12 text-muted-foreground/50" />
-    <p className="text-sm text-muted-foreground text-center font-medium">{caption}</p>
+    <p className="text-sm font-bold text-muted-foreground">Screenshot {number}</p>
+    <p className="text-sm text-muted-foreground text-center">{caption}</p>
   </div>
 );
 
