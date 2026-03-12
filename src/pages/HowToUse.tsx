@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import profCLogo from "@/assets/prof-c-logo.png";
 import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
 
-const ScreenshotPlaceholder = ({ caption }: { caption: string }) => (
+const ScreenshotPlaceholder = ({ number, caption }: { number: number; caption: string }) => (
   <div className="border-2 border-dashed border-muted-foreground/30 rounded-lg p-8 bg-muted/30 flex flex-col items-center justify-center gap-2 my-4">
     <Image className="w-12 h-12 text-muted-foreground/50" />
-    <p className="text-sm text-muted-foreground text-center font-medium">{caption}</p>
+    <p className="text-sm font-bold text-muted-foreground">Screenshot {number}</p>
+    <p className="text-sm text-muted-foreground text-center">{caption}</p>
   </div>
 );
 
@@ -68,14 +69,14 @@ const HowToUse = () => {
             Getting started is simple. From the homepage, enter a name for your event and click "Get started". 
             You'll be taken to the event creation page where you can add more details.
           </p>
-          <ScreenshotPlaceholder caption="Screenshot: Homepage with event name input field and 'Get started' button" />
+          <ScreenshotPlaceholder number={1} caption="Homepage with event name input field and 'Get started' button" />
           
           <h3 className="text-lg font-semibold mt-6 mb-2">Event Details</h3>
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
             <li><strong>Event Title:</strong> Give your event a clear, descriptive name (e.g., "Team Offsite Planning", "Dinner with Friends")</li>
             <li><strong>Description (Optional):</strong> Add any additional context your participants might need, like location, agenda, or special instructions</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Event creation form showing title and description fields" />
+          <ScreenshotPlaceholder number={2} caption="Event creation form showing title, description fields, and date calendar" />
         </section>
 
         {/* Section 2: Date Selection */}
@@ -91,7 +92,7 @@ const HowToUse = () => {
             <li>Click a selected date again to deselect it</li>
             <li>Use the "Week starts on" dropdown to change whether weeks begin on Sunday or Monday</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Calendar with multiple dates selected, showing the 'Week starts on' dropdown" />
+          <ScreenshotPlaceholder number={3} caption="Calendar with multiple dates selected, showing the 'Week starts on' dropdown" />
         </section>
 
         {/* Section 3: Time Settings */}
@@ -110,7 +111,7 @@ const HowToUse = () => {
             <li><strong>Latest Time:</strong> The latest time slot participants can select</li>
             <li><strong>Time Increment:</strong> How granular the time slots are (15 min, 30 min, 1 hour, etc.)</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Basic time settings showing earliest/latest time dropdowns and time increment selector" />
+          <ScreenshotPlaceholder number={4} caption="Basic time settings showing earliest/latest time dropdowns and time increment selector" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Advanced Mode</h3>
           <p className="text-muted-foreground mb-4">
@@ -124,7 +125,7 @@ const HowToUse = () => {
             <li>Click and drag to select multiple slots at once</li>
             <li>Only enabled slots will be shown to participants</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Advanced time grid showing different time slots enabled for different dates" />
+          <ScreenshotPlaceholder number={5} caption="Advanced time grid showing different time slots enabled for different dates" />
         </section>
 
         {/* Section 4: Sharing */}
@@ -140,7 +141,7 @@ const HowToUse = () => {
             <li>Anyone with the link can respond—no account needed</li>
             <li>The link contains encryption keys, so participants' names are protected</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Event page showing the 'Share' button and welcome card with copy link shortcut" />
+          <ScreenshotPlaceholder number={6} caption="Event page showing the 'Share' button and welcome card with copy link shortcut" />
           
           <div className="bg-accent/50 rounded-lg p-4 mt-4">
             <p className="text-sm text-accent-foreground">
@@ -161,7 +162,7 @@ const HowToUse = () => {
           <p className="text-muted-foreground mb-4">
             Click the <strong>"Join event"</strong> button next to the Availability heading. In the dialog that appears, enter your name and optionally add a password to protect your response from being edited by others. Then click <strong>"Continue"</strong>.
           </p>
-          <ScreenshotPlaceholder caption="Screenshot: Join event dialog with name and optional password fields, and Continue button" />
+          <ScreenshotPlaceholder number={7} caption="Join event dialog with name and optional password fields, and Continue button" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Step 2: Mark Your Availability</h3>
           <p className="text-muted-foreground mb-4">
@@ -173,13 +174,13 @@ const HowToUse = () => {
             <li>Your selected slots are outlined in black</li>
             <li>Green shading shows where others are also available</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Availability grid with some time slots selected (outlined in black with green shading)" />
+          <ScreenshotPlaceholder number={8} caption="Availability grid with some time slots selected (outlined in black with green shading)" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Step 3: Save Your Response</h3>
           <p className="text-muted-foreground mb-4">
             Click <strong>"Save response"</strong> to submit your availability. Your response will immediately appear in the participant list and be reflected in the heatmap.
           </p>
-          <ScreenshotPlaceholder caption="Screenshot: 'Save response', 'Finalize event', and 'Cancel' buttons below the availability grid" />
+          <ScreenshotPlaceholder number={9} caption="'Save response', 'Finalize event', and 'Cancel' buttons below the availability grid" />
         </section>
 
         {/* Section 6: Heatmap */}
@@ -194,7 +195,7 @@ const HowToUse = () => {
             <li><strong>Hover over a slot:</strong> See exactly who is available during that time</li>
             <li>The participant list on the right side shows everyone who has responded</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Heatmap view showing green intensity varying by availability, with hover tooltip showing participant names" />
+          <ScreenshotPlaceholder number={10} caption="Heatmap view showing green intensity varying by availability, with hover tooltip showing participant names" />
         </section>
 
         {/* Section 7: Editing */}
@@ -210,7 +211,7 @@ const HowToUse = () => {
             <li>If you set a password, you'll need to enter it</li>
             <li>Update your time selections and click <strong>"Save response"</strong></li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: 'Edit response' button in the Availability card header" />
+          <ScreenshotPlaceholder number={11} caption="'Edit response' button in the Availability card header" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Removing Your Response</h3>
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4 mb-4">
@@ -234,7 +235,7 @@ const HowToUse = () => {
             <li>Download an iCal file or share the finalized event via email</li>
             <li>The event will be marked as finalized and no more responses will be accepted</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Finalize mode showing 'Click a time slot on the grid to select the final time' prompt" />
+          <ScreenshotPlaceholder number={12} caption="Finalize mode showing 'Click a time slot on the grid to select the final time' prompt" />
           
           <div className="bg-accent/50 rounded-lg p-4 mt-4">
             <p className="text-sm text-accent-foreground">
