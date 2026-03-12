@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Shield, UserX, Database, Trash2, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import profCLogo from "@/assets/prof-c-logo.png";
+
 import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
 
 const Privacy = () => {
