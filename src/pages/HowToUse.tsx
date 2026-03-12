@@ -159,9 +159,9 @@ const HowToUse = () => {
           
           <h3 className="text-lg font-semibold mt-6 mb-2">Step 1: Enter Your Name</h3>
           <p className="text-muted-foreground mb-4">
-            Click "Join Event" and enter your name. Optionally, add a password if you want to protect your response from being edited by others.
+            Click the <strong>"Join event"</strong> button next to the Availability heading. In the dialog that appears, enter your name and optionally add a password to protect your response from being edited by others. Then click <strong>"Continue"</strong>.
           </p>
-          <ScreenshotPlaceholder caption="Screenshot: Join event dialog with name and optional password fields" />
+          <ScreenshotPlaceholder caption="Screenshot: Join event dialog with name and optional password fields, and Continue button" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Step 2: Mark Your Availability</h3>
           <p className="text-muted-foreground mb-4">
@@ -170,16 +170,16 @@ const HowToUse = () => {
           <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4 mb-4">
             <li>Click individual time slots to toggle them</li>
             <li>Click and drag to select multiple slots at once</li>
-            <li>Green slots = you're available</li>
-            <li>Gray slots = you're not available (or the organizer didn't offer that time)</li>
+            <li>Your selected slots are outlined in black</li>
+            <li>Green shading shows where others are also available</li>
           </ul>
-          <ScreenshotPlaceholder caption="Screenshot: Availability grid with some time slots selected (green)" />
+          <ScreenshotPlaceholder caption="Screenshot: Availability grid with some time slots selected (outlined in black with green shading)" />
 
           <h3 className="text-lg font-semibold mt-6 mb-2">Step 3: Save Your Response</h3>
           <p className="text-muted-foreground mb-4">
-            Click "Save" to submit your availability. Your response will immediately appear in the participant list and be reflected in the heatmap.
+            Click <strong>"Save response"</strong> to submit your availability. Your response will immediately appear in the participant list and be reflected in the heatmap.
           </p>
-          <ScreenshotPlaceholder caption="Screenshot: Save and Cancel buttons below the availability grid" />
+          <ScreenshotPlaceholder caption="Screenshot: 'Save response', 'Finalize event', and 'Cancel' buttons below the availability grid" />
         </section>
 
         {/* Section 6: Heatmap */}
