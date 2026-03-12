@@ -9,6 +9,7 @@ import { Share2, Users, CalendarDays, Clock, Lock, AlertTriangle, CalendarCheck,
 import { AvailabilityGrid } from "@/components/AvailabilityGrid";
 import { ParticipantList } from "@/components/ParticipantList";
 import { FinalizeEventDialog } from "@/components/FinalizeEventDialog";
+import { EmailSignup } from "@/components/EmailSignup";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { decryptText, encryptText, isEncrypted, getKeyFromHash } from "@/lib/encryption";
@@ -982,6 +983,13 @@ const EventView = () => {
           onFinalize={handleFinalizeEvent}
         />
       )}
+
+      {/* Footer */}
+      <footer className="border-t border-border mt-12">
+        <div className="container mx-auto px-4 py-8">
+          <EmailSignup />
+        </div>
+      </footer>
     </div>
   );
 };

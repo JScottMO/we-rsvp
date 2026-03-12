@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarDays, Clock, Users, Shield } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import profCLogo from "@/assets/prof-c-logo.png";
-import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
+import { EmailSignup } from "@/components/EmailSignup";
 
 const Index = () => {
   const [eventTitle, setEventTitle] = useState("");
@@ -115,32 +115,19 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Attribution */}
-          <div className="flex items-center justify-center gap-6 bg-muted rounded-lg p-4 w-fit mx-auto">
-            <a 
-              href="https://christiansonjs.com/links/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="hover:opacity-80 transition-opacity"
-            >
-              <img 
-                src={profCLogo} 
-                alt="Prof C Logo" 
-                className="w-12 h-12"
-              />
-            </a>
-            <a 
-              href="https://buymeacoffee.com/profc" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="hover:opacity-80 transition-opacity"
-            >
-              <img 
-                src={buyMeCoffeeLogo} 
-                alt="Buy me a coffee" 
-                className="h-10"
-              />
-            </a>
+          {/* Email Signup */}
+          <div className="bg-muted rounded-lg p-6 max-w-lg mx-auto">
+            <EmailSignup />
+            <div className="flex items-center justify-center mt-4">
+              <a 
+                href="https://christiansonjs.com/links/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:opacity-80 transition-opacity"
+              >
+                <img src={profCLogo} alt="Prof C Logo" className="w-10 h-10" />
+              </a>
+            </div>
           </div>
         </div>
       </main>
