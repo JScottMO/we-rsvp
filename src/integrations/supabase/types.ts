@@ -86,6 +86,21 @@ export type Database = {
         }
         Relationships: []
       }
+      page_views: {
+        Row: {
+          created_at: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
       responses: {
         Row: {
           availability: Json
@@ -184,6 +199,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      get_site_stats: { Args: never; Returns: Json }
     }
     Enums: {
       [_ in never]: never
