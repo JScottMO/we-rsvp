@@ -20,6 +20,7 @@ interface BlogPost {
   published: boolean;
   likes_count: number;
   created_at: string;
+  scheduled_at: string | null;
 }
 
 const BlogAdmin = () => {
@@ -37,6 +38,7 @@ const BlogAdmin = () => {
   const [content, setContent] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [published, setPublished] = useState(false);
+  const [scheduledAt, setScheduledAt] = useState("");
 
   const callApi = async (body: Record<string, unknown>) => {
     const { data, error } = await supabase.functions.invoke("manage-blog", {
@@ -81,6 +83,7 @@ const BlogAdmin = () => {
     setContent("");
     setExcerpt("");
     setPublished(false);
+    setScheduledAt("");
     setEditing(null);
     setCreating(false);
   };
@@ -96,6 +99,7 @@ const BlogAdmin = () => {
     setContent(post.content);
     setExcerpt(post.excerpt || "");
     setPublished(post.published);
+    setScheduledAt(post.scheduled_at ? post.scheduled_at.slice(0, 16) : "");
     setEditing(post);
     setCreating(false);
   };
@@ -117,6 +121,7 @@ const BlogAdmin = () => {
           content,
           excerpt: excerpt || null,
           published,
+          scheduled_at: scheduledAt ? new Date(scheduledAt).toISOString() : null,
         });
         toast({ title: "Post updated" });
       } else {
@@ -127,6 +132,7 @@ const BlogAdmin = () => {
           content,
           excerpt: excerpt || null,
           published,
+          scheduled_at: scheduledAt ? new Date(scheduledAt).toISOString() : null,
         });
         toast({ title: "Post created" });
       }
@@ -241,6 +247,17 @@ const BlogAdmin = () => {
                   className="min-h-[300px] font-mono text-sm"
                 />
               </div>
+              <div>
+                <label className="text-sm font-medium text-foreground">Schedule publish (optional)</label>
+                <Input
+                  type="datetime-local"
+                  value={scheduledAt}
+                  onChange={(e) => setScheduledAt(e.target.value)}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  {scheduledAt ? `Will become visible on ${new Date(scheduledAt).toLocaleString()}` : "Leave empty to publish immediately when marked as published"}
+                </p>
+              </div>
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -274,6 +291,9 @@ const BlogAdmin = () => {
                   </div>
                   <span className="text-xs text-muted-foreground">
                     {format(new Date(post.created_at), "MMM d, yyyy")} · {post.likes_count} likes · /{post.slug}
+                    {post.scheduled_at && new Date(post.scheduled_at) > new Date() && (
+                      <span className="ml-1 text-primary">· Scheduled {format(new Date(post.scheduled_at), "MMM d, yyyy h:mm a")}</span>
+                    )}
                   </span>
                 </div>
                 <div className="flex items-center gap-1 ml-4">

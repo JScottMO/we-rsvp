@@ -17,7 +17,7 @@ Deno.serve(async (req) => {
     );
 
     const body = await req.json();
-    const { action, password, title, slug, content, excerpt, published, postId } = body;
+    const { action, password, title, slug, content, excerpt, published, postId, scheduled_at } = body;
 
     // Like action doesn't need password
     if (action === "like") {
@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
     if (action === "create") {
       const { data, error } = await supabase
         .from("blog_posts")
-        .insert({ title, slug, content, excerpt, published: published ?? false })
+        .insert({ title, slug, content, excerpt, published: published ?? false, scheduled_at: scheduled_at || null })
         .select()
         .single();
       if (error) throw error;
@@ -56,6 +56,7 @@ Deno.serve(async (req) => {
       if (content !== undefined) updateData.content = content;
       if (excerpt !== undefined) updateData.excerpt = excerpt;
       if (published !== undefined) updateData.published = published;
+      if (scheduled_at !== undefined) updateData.scheduled_at = scheduled_at || null;
 
       const { data, error } = await supabase
         .from("blog_posts")
