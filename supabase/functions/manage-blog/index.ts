@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
     if (action === "create") {
       const { data, error } = await supabase
         .from("blog_posts")
-        .insert({ title, slug, content, excerpt, published: published ?? false })
+        .insert({ title, slug, content, excerpt, published: published ?? false, scheduled_at: scheduled_at || null })
         .select()
         .single();
       if (error) throw error;
