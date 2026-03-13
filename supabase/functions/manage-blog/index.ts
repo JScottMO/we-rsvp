@@ -17,7 +17,7 @@ Deno.serve(async (req) => {
     );
 
     const body = await req.json();
-    const { action, password, title, slug, content, excerpt, published, postId } = body;
+    const { action, password, title, slug, content, excerpt, published, postId, scheduled_at } = body;
 
     // Like action doesn't need password
     if (action === "like") {
