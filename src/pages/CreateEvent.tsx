@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Calendar } from "@/components/ui/calendar";
-import { Plus, X, Lock } from "lucide-react";
+import { CalendarDays, Plus, X, Lock } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
 import { format, addDays } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
