@@ -18,6 +18,12 @@ interface BlogPost {
   created_at: string;
 }
 
+const getPreviewText = (content: string, wordCount = 150): string => {
+  const words = content.replace(/[#*_>`\[\]()!-]/g, ' ').replace(/\s+/g, ' ').trim().split(' ');
+  const preview = words.slice(0, wordCount).join(' ');
+  return words.length > wordCount ? preview + '…' : preview;
+};
+
 const Blog = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -75,11 +81,9 @@ const Blog = () => {
                     <CardTitle className="group-hover:text-primary transition-colors">
                       {post.title}
                     </CardTitle>
-                    {post.excerpt && (
-                      <CardDescription className="line-clamp-2">
-                        {post.excerpt}
-                      </CardDescription>
-                    )}
+                    <CardDescription className="text-sm text-muted-foreground leading-relaxed mt-1">
+                      {post.excerpt || getPreviewText(post.content)}
+                    </CardDescription>
                   </CardHeader>
                 </Card>
               </Link>
