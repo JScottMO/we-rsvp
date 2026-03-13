@@ -83,6 +83,7 @@ const BlogAdmin = () => {
     setContent("");
     setExcerpt("");
     setPublished(false);
+    setScheduledAt("");
     setEditing(null);
     setCreating(false);
   };
