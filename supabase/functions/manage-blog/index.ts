@@ -56,6 +56,7 @@ Deno.serve(async (req) => {
       if (content !== undefined) updateData.content = content;
       if (excerpt !== undefined) updateData.excerpt = excerpt;
       if (published !== undefined) updateData.published = published;
+      if (scheduled_at !== undefined) updateData.scheduled_at = scheduled_at || null;
 
       const { data, error } = await supabase
         .from("blog_posts")

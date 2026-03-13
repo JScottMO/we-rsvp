@@ -291,6 +291,9 @@ const BlogAdmin = () => {
                   </div>
                   <span className="text-xs text-muted-foreground">
                     {format(new Date(post.created_at), "MMM d, yyyy")} · {post.likes_count} likes · /{post.slug}
+                    {post.scheduled_at && new Date(post.scheduled_at) > new Date() && (
+                      <span className="ml-1 text-primary">· Scheduled {format(new Date(post.scheduled_at), "MMM d, yyyy h:mm a")}</span>
+                    )}
                   </span>
                 </div>
                 <div className="flex items-center gap-1 ml-4">
