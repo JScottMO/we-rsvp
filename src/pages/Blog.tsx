@@ -44,7 +44,7 @@ const Blog = () => {
       <SiteHeader />
       <main className="container mx-auto px-4 py-12 max-w-3xl">
         <h1 className="text-4xl font-bold text-foreground mb-2">Blog</h1>
-        <p className="text-muted-foreground mb-8">Thoughts on scheduling, privacy, and building we.rsvp</p>
+        <p className="text-muted-foreground mb-8">Thoughts on rebuilding the web and sustaining ad-free, privacy first sites.</p>
 
         {loading ? (
           <div className="space-y-4">
