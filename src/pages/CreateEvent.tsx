@@ -455,6 +455,8 @@ const CreateEvent = () => {
           </div>
         </div>
       </main>
+
+      <SiteFooter />
     </div>
   );
 };

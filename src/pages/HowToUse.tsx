@@ -266,22 +266,9 @@ const HowToUse = () => {
           </div>
         </section>
 
-        {/* Attribution Footer */}
-        <div className="flex items-center justify-center gap-6 bg-muted rounded-lg p-4 w-fit mx-auto">
-          <a 
-            href="https://buymeacoffee.com/profc" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hover:opacity-80 transition-opacity"
-          >
-            <img 
-              src={buyMeCoffeeLogo} 
-              alt="Buy me a coffee" 
-              className="h-10"
-            />
-          </a>
-        </div>
       </main>
+
+      <SiteFooter />
     </div>
   );
 };
