@@ -121,6 +121,7 @@ const BlogAdmin = () => {
           content,
           excerpt: excerpt || null,
           published,
+          scheduled_at: scheduledAt ? new Date(scheduledAt).toISOString() : null,
         });
         toast({ title: "Post updated" });
       } else {
@@ -131,6 +132,7 @@ const BlogAdmin = () => {
           content,
           excerpt: excerpt || null,
           published,
+          scheduled_at: scheduledAt ? new Date(scheduledAt).toISOString() : null,
         });
         toast({ title: "Post created" });
       }
