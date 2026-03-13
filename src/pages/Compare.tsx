@@ -314,9 +314,6 @@ const Compare = () => {
           This comparison was created in February 2026. Features and pricing may change.
         </p>
 
-        <div className="mb-4">
-          <BackButton />
-        </div>
 
         {/* Attribution */}
         <div className="flex items-center justify-center gap-6 bg-muted rounded-lg p-4 w-fit mx-auto mb-8">
