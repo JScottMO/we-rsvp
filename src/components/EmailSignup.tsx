@@ -56,7 +56,7 @@ export const EmailSignup = ({ className = "" }: { className?: string }) => {
     <div className={className}>
       <div className="flex items-center justify-center gap-2 mb-3">
         <Mail className="w-4 h-4 text-muted-foreground" />
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground text-center">
           We build free, privacy-first tools — get notified when we launch more
         </p>
       </div>
