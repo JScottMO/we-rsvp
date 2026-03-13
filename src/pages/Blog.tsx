@@ -81,11 +81,9 @@ const Blog = () => {
                     <CardTitle className="group-hover:text-primary transition-colors">
                       {post.title}
                     </CardTitle>
-                    {post.excerpt && (
-                      <CardDescription className="line-clamp-2">
-                        {post.excerpt}
-                      </CardDescription>
-                    )}
+                    <CardDescription className="text-sm text-muted-foreground leading-relaxed mt-1">
+                      {post.excerpt || getPreviewText(post.content)}
+                    </CardDescription>
                   </CardHeader>
                 </Card>
               </Link>
