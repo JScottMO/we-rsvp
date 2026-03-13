@@ -56,7 +56,6 @@ const Index = () => {
               <Link to="/feedback" className="text-primary hover:underline text-xs">
                 Submit feedback →
               </Link>
-              </div>
             </div>
           </div>
         </div>
