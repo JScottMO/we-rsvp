@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { CalendarDays, Image } from "lucide-react";
+import { Image } from "lucide-react";
 import { Link } from "react-router-dom";
+import SiteHeader from "@/components/SiteHeader";
 
 import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
 import screenshot1 from "@/assets/howto-screenshot-1.png";
