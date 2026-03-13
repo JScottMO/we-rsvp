@@ -9,6 +9,7 @@ import EventView from "./pages/EventView";
 import Privacy from "./pages/Privacy";
 import Compare from "./pages/Compare";
 import HowToUse from "./pages/HowToUse";
+import Feedback from "./pages/Feedback";
 import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/compare" element={<Compare />} />
           <Route path="/how-to-use" element={<HowToUse />} />
+          <Route path="/feedback" element={<Feedback />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
