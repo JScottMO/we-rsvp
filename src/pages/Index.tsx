@@ -1,16 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CalendarDays, Clock, Users, Shield } from "lucide-react";
+import { CalendarDays, Clock, Users, Shield, BarChart3 } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 import { EmailSignup } from "@/components/EmailSignup";
 
 const Index = () => {
   const [eventTitle, setEventTitle] = useState("");
+  const [stats, setStats] = useState<{ total_events: number; total_views: number } | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Record page view
+    supabase.from("page_views").insert({}).then();
+
+    // Fetch stats
+    supabase.rpc("get_site_stats").then(({ data }) => {
+      if (data) setStats(data as { total_events: number; total_views: number });
+    });
+  }, []);
 
   const handleCreateEvent = () => {
     if (eventTitle.trim()) {
@@ -114,6 +126,20 @@ const Index = () => {
               </p>
             </div>
           </div>
+
+          {/* Stats */}
+          {stats && (
+            <div className="flex justify-center gap-12 mb-8">
+              <div className="text-center">
+                <p className="text-3xl font-bold text-foreground">{stats.total_events.toLocaleString()}</p>
+                <p className="text-sm text-muted-foreground">Events created</p>
+              </div>
+              <div className="text-center">
+                <p className="text-3xl font-bold text-foreground">{stats.total_views.toLocaleString()}</p>
+                <p className="text-sm text-muted-foreground">Page visits</p>
+              </div>
+            </div>
+          )}
 
           {/* Email Signup */}
           <div className="bg-muted rounded-lg p-6 max-w-lg mx-auto">
