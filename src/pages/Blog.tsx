@@ -18,6 +18,12 @@ interface BlogPost {
   created_at: string;
 }
 
+const getPreviewText = (content: string, wordCount = 150): string => {
+  const words = content.replace(/[#*_>`\[\]()!-]/g, ' ').replace(/\s+/g, ' ').trim().split(' ');
+  const preview = words.slice(0, wordCount).join(' ');
+  return words.length > wordCount ? preview + '…' : preview;
+};
+
 const Blog = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
