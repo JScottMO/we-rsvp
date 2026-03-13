@@ -11,7 +11,18 @@ import { EmailSignup } from "@/components/EmailSignup";
 
 const Index = () => {
   const [eventTitle, setEventTitle] = useState("");
+  const [stats, setStats] = useState<{ total_events: number; total_views: number } | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Record page view
+    supabase.from("page_views").insert({}).then();
+
+    // Fetch stats
+    supabase.rpc("get_site_stats").then(({ data }) => {
+      if (data) setStats(data as { total_events: number; total_views: number });
+    });
+  }, []);
 
   const handleCreateEvent = () => {
     if (eventTitle.trim()) {
