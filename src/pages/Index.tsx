@@ -3,11 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CalendarDays, Clock, Users, Shield, BarChart3 } from "lucide-react";
+import { Clock, Users, Shield } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
 import { EmailSignup } from "@/components/EmailSignup";
+import SiteHeader from "@/components/SiteHeader";
 
 const Index = () => {
   const [eventTitle, setEventTitle] = useState("");
