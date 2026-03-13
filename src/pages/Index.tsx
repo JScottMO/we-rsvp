@@ -45,9 +45,14 @@ const Index = () => {
             </div>
             <div className="text-sm text-muted-foreground flex flex-col items-end">
               <span>Privacy-first group scheduling</span>
-              <Link to="/compare" className="text-primary hover:underline text-xs">
-                See how we compare →
-              </Link>
+              <div className="flex gap-2 text-xs">
+                <Link to="/how-to-use" className="text-primary hover:underline">
+                  How to use →
+                </Link>
+                <Link to="/compare" className="text-primary hover:underline">
+                  See how we compare →
+                </Link>
+              </div>
             </div>
           </div>
         </div>
