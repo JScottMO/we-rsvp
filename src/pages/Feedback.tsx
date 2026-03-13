@@ -4,8 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CalendarDays, MessageSquare, Check } from "lucide-react";
+import { MessageSquare, Check } from "lucide-react";
 import { Link } from "react-router-dom";
+import SiteHeader from "@/components/SiteHeader";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
@@ -65,30 +66,7 @@ const Feedback = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <CalendarDays className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <h1 className="text-2xl font-bold text-foreground">we.rsvp</h1>
-            </Link>
-            <div className="text-sm text-muted-foreground flex flex-col items-end">
-              <span>Privacy-first group scheduling</span>
-              <div className="flex gap-2 text-xs">
-                <Link to="/how-to-use" className="text-primary hover:underline">
-                  How to use →
-                </Link>
-                <Link to="/compare" className="text-primary hover:underline">
-                  See how we compare →
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="container mx-auto px-4 py-12">
         <div className="max-w-lg mx-auto">

@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { CalendarDays, Image } from "lucide-react";
+import { Image } from "lucide-react";
 import { Link } from "react-router-dom";
+import SiteHeader from "@/components/SiteHeader";
 
 import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
 import screenshot1 from "@/assets/howto-screenshot-1.png";
@@ -25,27 +26,7 @@ const ScreenshotPlaceholder = ({ number, caption }: { number: number; caption: s
 const HowToUse = () => {
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <CalendarDays className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <h1 className="text-2xl font-bold text-foreground">we.rsvp</h1>
-            </Link>
-            <nav className="flex gap-4 text-sm">
-              <Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
-                Privacy
-              </Link>
-              <Link to="/compare" className="text-muted-foreground hover:text-foreground transition-colors">
-                Compare
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="text-center mb-12">

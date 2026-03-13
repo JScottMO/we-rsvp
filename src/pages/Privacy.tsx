@@ -1,28 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Shield, UserX, Database, Trash2, Lock } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Shield, UserX, Database, Trash2, Lock } from "lucide-react";
+import SiteHeader from "@/components/SiteHeader";
 
 import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
 
 const Privacy = () => {
-  const navigate = useNavigate();
-
-  const BackButton = () => (
-    <Button 
-      variant="ghost" 
-      onClick={() => navigate("/")}
-      className="gap-2"
-    >
-      <ArrowLeft className="w-4 h-4" />
-      Back to Home
-    </Button>
-  );
-
   return (
     <div className="min-h-screen bg-background">
+      <SiteHeader />
       <div className="container mx-auto px-4 py-8 max-w-3xl">
-        <BackButton />
 
         <div className="mt-8 mb-12">
           <div className="flex items-center gap-3 mb-4">
@@ -177,9 +164,6 @@ const Privacy = () => {
           </Card>
         </div>
 
-        <div className="mt-8 mb-4">
-          <BackButton />
-        </div>
 
         {/* Attribution */}
         <div className="flex items-center justify-center gap-6 bg-muted rounded-lg p-4 w-fit mx-auto mb-8">

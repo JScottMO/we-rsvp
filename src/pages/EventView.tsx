@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Share2, Users, CalendarDays, Clock, Lock, AlertTriangle, CalendarCheck, Globe, CalendarPlus } from "lucide-react";
+import SiteHeader from "@/components/SiteHeader";
 import { AvailabilityGrid } from "@/components/AvailabilityGrid";
 import { ParticipantList } from "@/components/ParticipantList";
 import { FinalizeEventDialog } from "@/components/FinalizeEventDialog";
@@ -714,9 +715,11 @@ const EventView = () => {
         </div>
       )}
       
-      {/* Header */}
-      <header className="border-b border-border bg-card">
-        <div className="container mx-auto px-4 py-6">
+      <SiteHeader />
+
+      {/* Event Info Header */}
+      <div className="border-b border-border bg-card">
+        <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
@@ -729,9 +732,9 @@ const EventView = () => {
                 )}
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-foreground">{event.title}</h1>
+                <h2 className="text-xl font-bold text-foreground">{event.title}</h2>
                 {event.description && (
-                  <p className="text-muted-foreground">{event.description}</p>
+                  <p className="text-muted-foreground text-sm">{event.description}</p>
                 )}
                 {encryptionKey && !decryptionError && (
                   <p className="text-xs text-primary flex items-center gap-1 mt-1">
@@ -754,7 +757,7 @@ const EventView = () => {
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
