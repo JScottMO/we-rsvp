@@ -58,7 +58,7 @@ Deno.serve(async (req) => {
             to: payload.to,
             subject: payload.subject,
             html: payload.html,
-            from: 'errors@notify.we.rsvp',
+            from: 'noreply@notify.we.rsvp',
             purpose: 'transactional',
           }),
         });
