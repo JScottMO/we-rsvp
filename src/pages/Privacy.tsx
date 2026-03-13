@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Shield, UserX, Database, Trash2, Lock } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Shield, UserX, Database, Trash2, Lock } from "lucide-react";
+import SiteHeader from "@/components/SiteHeader";
 
 import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
 
