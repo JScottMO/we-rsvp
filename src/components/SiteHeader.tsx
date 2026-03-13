@@ -17,9 +17,6 @@ const SiteHeader = () => {
               <Link to="/privacy" className="text-primary hover:underline">Privacy-first</Link> group scheduling
             </span>
             <div className="flex gap-2 text-xs">
-              <Link to="/blog" className="text-primary hover:underline">
-                Blog →
-              </Link>
               <Link to="/how-to-use" className="text-primary hover:underline">
                 How to use →
               </Link>
@@ -27,9 +24,14 @@ const SiteHeader = () => {
                 See how we compare →
               </Link>
             </div>
-            <Link to="/feedback" className="text-primary hover:underline text-xs">
-              Submit feedback →
-            </Link>
+            <div className="flex gap-2 text-xs">
+              <Link to="/feedback" className="text-primary hover:underline">
+                Submit feedback →
+              </Link>
+              <Link to="/blog" className="text-primary hover:underline">
+                Blog →
+              </Link>
+            </div>
           </div>
         </div>
       </div>
