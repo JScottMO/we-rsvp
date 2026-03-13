@@ -57,7 +57,7 @@ export const EmailSignup = ({ className = "" }: { className?: string }) => {
       <div className="flex items-center justify-center gap-2 mb-3">
         <Mail className="w-4 h-4 text-muted-foreground" />
         <p className="text-sm text-muted-foreground">
-          Get notified when we launch similar tools
+          We build free, privacy-first tools — get notified when we launch more
         </p>
       </div>
       <form onSubmit={handleSubmit} className="flex gap-2 max-w-sm mx-auto">
