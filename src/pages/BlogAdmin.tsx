@@ -20,6 +20,7 @@ interface BlogPost {
   published: boolean;
   likes_count: number;
   created_at: string;
+  scheduled_at: string | null;
 }
 
 const BlogAdmin = () => {
