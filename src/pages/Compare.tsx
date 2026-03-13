@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight, Check, X, Minus } from "lucide-react";
+import { ArrowRight, Check, X, Minus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import SiteHeader from "@/components/SiteHeader";
 
 import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
 import {
@@ -16,21 +17,10 @@ import {
 const Compare = () => {
   const navigate = useNavigate();
 
-  const BackButton = () => (
-    <Button 
-      variant="ghost" 
-      onClick={() => navigate("/")}
-      className="gap-2"
-    >
-      <ArrowLeft className="w-4 h-4" />
-      Back to Home
-    </Button>
-  );
-
   return (
     <div className="min-h-screen bg-background">
+      <SiteHeader />
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <BackButton />
 
         <div className="mt-8 mb-8">
           <p className="text-sm text-muted-foreground mb-2">Last updated: February 2026</p>
