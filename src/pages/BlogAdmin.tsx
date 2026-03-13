@@ -247,6 +247,17 @@ const BlogAdmin = () => {
                   className="min-h-[300px] font-mono text-sm"
                 />
               </div>
+              <div>
+                <label className="text-sm font-medium text-foreground">Schedule publish (optional)</label>
+                <Input
+                  type="datetime-local"
+                  value={scheduledAt}
+                  onChange={(e) => setScheduledAt(e.target.value)}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  {scheduledAt ? `Will become visible on ${new Date(scheduledAt).toLocaleString()}` : "Leave empty to publish immediately when marked as published"}
+                </p>
+              </div>
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
