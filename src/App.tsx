@@ -26,6 +26,7 @@ const App = () => (
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/compare" element={<Compare />} />
           <Route path="/how-to-use" element={<HowToUse />} />
+          <Route path="/feedback" element={<Feedback />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
