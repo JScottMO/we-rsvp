@@ -52,10 +52,10 @@ const Index = () => {
                 <Link to="/compare" className="text-primary hover:underline">
                   See how we compare →
                 </Link>
-                <Link to="/feedback" className="text-primary hover:underline">
-                  Submit feedback →
-                </Link>
               </div>
+              <Link to="/feedback" className="text-primary hover:underline text-xs">
+                Submit feedback →
+              </Link>
             </div>
           </div>
         </div>
