@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MessageSquare, Check } from "lucide-react";
 import { Link } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
@@ -169,14 +170,7 @@ const Feedback = () => {
         </div>
       </main>
 
-      <footer className="border-t border-border py-4">
-        <p className="text-center text-xs text-muted-foreground">
-          This is a ProfC gig,{" "}
-          <a href="https://profcnews.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-            contact him to learn more
-          </a>
-        </p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 };

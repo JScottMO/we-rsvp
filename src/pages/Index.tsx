@@ -7,8 +7,8 @@ import { Clock, Users, Shield } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
-import { EmailSignup } from "@/components/EmailSignup";
 import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 
 const Index = () => {
   const [eventTitle, setEventTitle] = useState("");
@@ -124,22 +124,10 @@ const Index = () => {
             </div>
           )}
 
-          {/* Email Signup */}
-          <div className="bg-muted rounded-lg p-6 max-w-lg mx-auto">
-            <EmailSignup />
-          </div>
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-border py-4">
-        <p className="text-center text-xs text-muted-foreground">
-          This is a ProfC gig,{" "}
-          <a href="https://profcnews.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-            contact him to learn more
-          </a>
-        </p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 };

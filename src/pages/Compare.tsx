@@ -4,7 +4,7 @@ import { ArrowRight, Check, X, Minus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 
-import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
+import SiteFooter from "@/components/SiteFooter";
 import {
   Table,
   TableBody,
@@ -315,22 +315,9 @@ const Compare = () => {
         </p>
 
 
-        {/* Attribution */}
-        <div className="flex items-center justify-center gap-6 bg-muted rounded-lg p-4 w-fit mx-auto mb-8">
-          <a 
-            href="https://buymeacoffee.com/profc" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hover:opacity-80 transition-opacity"
-          >
-            <img 
-              src={buyMeCoffeeLogo} 
-              alt="Buy me a coffee" 
-              className="h-10"
-            />
-          </a>
-        </div>
       </div>
+
+      <SiteFooter />
     </div>
   );
 };
