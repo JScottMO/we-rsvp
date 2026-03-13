@@ -44,7 +44,7 @@ const Index = () => {
               <h1 className="text-2xl font-bold text-foreground">we.rsvp</h1>
             </div>
             <div className="text-sm text-muted-foreground flex flex-col items-end">
-              <span>Privacy-first group scheduling</span>
+              <span><Link to="/privacy" className="text-primary hover:underline">Privacy-first</Link> group scheduling</span>
               <div className="flex gap-2 text-xs">
                 <Link to="/how-to-use" className="text-primary hover:underline">
                   How to use →
