@@ -17,6 +17,9 @@ const SiteHeader = () => {
               <Link to="/privacy" className="text-primary hover:underline">Privacy-first</Link> group scheduling
             </span>
             <div className="flex gap-2 text-xs">
+              <Link to="/blog" className="text-primary hover:underline">
+                Blog →
+              </Link>
               <Link to="/how-to-use" className="text-primary hover:underline">
                 How to use →
               </Link>
