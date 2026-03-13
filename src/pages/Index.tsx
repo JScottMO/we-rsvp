@@ -7,8 +7,8 @@ import { Clock, Users, Shield } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
-import { EmailSignup } from "@/components/EmailSignup";
 import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 
 const Index = () => {
   const [eventTitle, setEventTitle] = useState("");

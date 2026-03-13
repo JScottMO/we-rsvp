@@ -3,7 +3,7 @@ import { Image } from "lucide-react";
 import { Link } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 
-import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
+import SiteFooter from "@/components/SiteFooter";
 import screenshot1 from "@/assets/howto-screenshot-1.png";
 import screenshot2 from "@/assets/howto-screenshot-2.png";
 import screenshot3 from "@/assets/howto-screenshot-3.png";

@@ -4,7 +4,7 @@ import { ArrowRight, Check, X, Minus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 
-import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
+import SiteFooter from "@/components/SiteFooter";
 import {
   Table,
   TableBody,

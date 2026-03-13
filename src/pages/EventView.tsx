@@ -10,7 +10,7 @@ import SiteHeader from "@/components/SiteHeader";
 import { AvailabilityGrid } from "@/components/AvailabilityGrid";
 import { ParticipantList } from "@/components/ParticipantList";
 import { FinalizeEventDialog } from "@/components/FinalizeEventDialog";
-import { EmailSignup } from "@/components/EmailSignup";
+import SiteFooter from "@/components/SiteFooter";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { decryptText, encryptText, isEncrypted, getKeyFromHash } from "@/lib/encryption";
