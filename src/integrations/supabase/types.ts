@@ -139,6 +139,21 @@ export type Database = {
           },
         ]
       }
+      site_counters: {
+        Row: {
+          key: string
+          value: number
+        }
+        Insert: {
+          key: string
+          value?: number
+        }
+        Update: {
+          key?: string
+          value?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       responses_public: {
