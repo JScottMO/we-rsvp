@@ -6,23 +6,10 @@ import SiteHeader from "@/components/SiteHeader";
 import buyMeCoffeeLogo from "@/assets/buymeacoffee.png";
 
 const Privacy = () => {
-  const navigate = useNavigate();
-
-  const BackButton = () => (
-    <Button 
-      variant="ghost" 
-      onClick={() => navigate("/")}
-      className="gap-2"
-    >
-      <ArrowLeft className="w-4 h-4" />
-      Back to Home
-    </Button>
-  );
-
   return (
     <div className="min-h-screen bg-background">
+      <SiteHeader />
       <div className="container mx-auto px-4 py-8 max-w-3xl">
-        <BackButton />
 
         <div className="mt-8 mb-12">
           <div className="flex items-center gap-3 mb-4">
