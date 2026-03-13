@@ -10,6 +10,9 @@ import Privacy from "./pages/Privacy";
 import Compare from "./pages/Compare";
 import HowToUse from "./pages/HowToUse";
 import Feedback from "./pages/Feedback";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
+import BlogAdmin from "./pages/BlogAdmin";
 import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
