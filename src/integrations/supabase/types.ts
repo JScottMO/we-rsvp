@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      blog_posts: {
+        Row: {
+          content: string
+          created_at: string
+          excerpt: string | null
+          id: string
+          likes_count: number
+          published: boolean
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          likes_count?: number
+          published?: boolean
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          likes_count?: number
+          published?: boolean
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       email_signups: {
         Row: {
           created_at: string
@@ -242,6 +278,7 @@ export type Database = {
         Returns: undefined
       }
       get_site_stats: { Args: never; Returns: Json }
+      like_blog_post: { Args: { post_id: string }; Returns: undefined }
     }
     Enums: {
       [_ in never]: never
