@@ -127,6 +127,20 @@ const Index = () => {
             </div>
           </div>
 
+          {/* Stats */}
+          {stats && (
+            <div className="flex justify-center gap-12 mb-8">
+              <div className="text-center">
+                <p className="text-3xl font-bold text-foreground">{stats.total_events.toLocaleString()}</p>
+                <p className="text-sm text-muted-foreground">Events created</p>
+              </div>
+              <div className="text-center">
+                <p className="text-3xl font-bold text-foreground">{stats.total_views.toLocaleString()}</p>
+                <p className="text-sm text-muted-foreground">Page visits</p>
+              </div>
+            </div>
+          )}
+
           {/* Email Signup */}
           <div className="bg-muted rounded-lg p-6 max-w-lg mx-auto">
             <EmailSignup />
