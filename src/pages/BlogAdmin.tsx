@@ -38,6 +38,7 @@ const BlogAdmin = () => {
   const [content, setContent] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [published, setPublished] = useState(false);
+  const [scheduledAt, setScheduledAt] = useState("");
 
   const callApi = async (body: Record<string, unknown>) => {
     const { data, error } = await supabase.functions.invoke("manage-blog", {
