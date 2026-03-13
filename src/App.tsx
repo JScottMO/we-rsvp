@@ -9,6 +9,7 @@ import EventView from "./pages/EventView";
 import Privacy from "./pages/Privacy";
 import Compare from "./pages/Compare";
 import HowToUse from "./pages/HowToUse";
+import Feedback from "./pages/Feedback";
 import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
