@@ -99,6 +99,7 @@ const BlogAdmin = () => {
     setContent(post.content);
     setExcerpt(post.excerpt || "");
     setPublished(post.published);
+    setScheduledAt(post.scheduled_at ? post.scheduled_at.slice(0, 16) : "");
     setEditing(post);
     setCreating(false);
   };
